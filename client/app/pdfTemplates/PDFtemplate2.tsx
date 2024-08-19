@@ -7,23 +7,7 @@ import {
   StyleSheet,
 } from "@react-pdf/renderer";
 
-type ResumeDeatilsFormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  dateOfBirth?: string;
-  professionalSummary?: string;
-  city?: string;
-  address?: string;
-  employmentHistory?: string;
-  education?: string;
-  photo?: string;
-  socialLinks?: Array<string>;
-  skills?: Array<string>;
-  age?: number;
-};
-
+import type { ResumeDeatilsFormData } from "@/app/utils/types";
 
 const styles = StyleSheet.create({
   page: {
@@ -60,7 +44,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 12,
-    lineHeight: 1.5, // Tailwind's leading-relaxed
+    lineHeight: 1.5, 
   },
   list: {
     margin: 0,
@@ -70,32 +54,49 @@ const styles = StyleSheet.create({
   listItem: {
     marginBottom: 5,
     fontSize: 12,
-    lineHeight: 1.5, // Tailwind's leading-relaxed
+    lineHeight: 1.5,
   },
   bullet: {
     marginRight: 5,
     fontSize: 12,
     fontWeight: "bold",
-    color: "#374151", // Tailwind's text-gray-700
+    color: "#374151", 
   },
 });
 
-// Create a CV component with enhanced styling
-const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = () => (
+
+const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
+  resumeDetails,
+}) => (
   <Document>
     <Page style={styles.page}>
       <View style={styles.container}>
-        {/* Header */}
         <View>
-          <Text style={styles.header}>John Doe</Text>
+          <Text style={styles.header}>
+            {resumeDetails.firstName} {resumeDetails.lastName}
+          </Text>
+          {/* <Text render={({resumeDetails}) =>{
+              `${resumeDetails.firstName}`
+            }} style={styles.header}>
+            
+          </Text> */}
           <Text style={styles.contact}>Email: john.doe@example.com</Text>
-          <Text style={styles.contact}>Phone: (123) 456-7890</Text>
+          <Text style={styles.contact}>Phone: {resumeDetails.phone}</Text>
           <Text style={styles.contact}>LinkedIn: linkedin.com/in/johndoe</Text>
         </View>
 
-        {/* Experience */}
-        <View style={styles.section}>
-          <Text style={styles.subheader}>Experience</Text>
+        {/* showing the section if the title exists */}
+        {resumeDetails.professionalSummaryTITLE && (
+          <View style={styles.section}>
+            <Text style={styles.subheader}>
+              {resumeDetails.professionalSummaryTITLE}
+            </Text>
+            <Text style={styles.text}>{resumeDetails.professionalSummary}</Text>
+          </View>
+        )}
+
+{resumeDetails.emplymentTITLE && (<View style={styles.section}>
+          <Text style={styles.subheader}>{resumeDetails.emplymentTITLE}</Text>
           <Text style={styles.text}>
             <Text style={{ fontWeight: "bold" }}>Senior Developer</Text> -
             Company A (Jan 2020 - Present)
@@ -125,9 +126,9 @@ const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = () => (
               performance by 30% through code optimization.
             </Text>
           </View>
-        </View>
+        </View>)}
+        
 
-        {/* Education */}
         <View style={styles.section}>
           <Text style={styles.subheader}>Education</Text>
           <Text style={styles.text}>
@@ -136,9 +137,8 @@ const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = () => (
           </Text>
         </View>
 
-        {/* Skills */}
-        <View style={styles.section}>
-          <Text style={styles.subheader}>Skills</Text>
+  {resumeDetails.skillsTITLE && ( <View style={styles.section}>
+          <Text style={styles.subheader}>{resumeDetails.skillsTITLE }</Text>
           <View style={styles.list}>
             <Text style={styles.listItem}>
               <Text style={styles.bullet}>•</Text> JavaScript, React, Node.js
@@ -153,7 +153,8 @@ const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = () => (
               <Text style={styles.bullet}>•</Text> Git, Docker
             </Text>
           </View>
-        </View>
+        </View>)}
+       
 
         {/* Projects */}
         <View style={styles.section}>
