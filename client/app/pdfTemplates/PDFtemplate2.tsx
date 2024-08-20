@@ -5,46 +5,51 @@ import {
   Text,
   View,
   StyleSheet,
+  Link,
 } from "@react-pdf/renderer";
 
 import type { ResumeDeatilsFormData } from "@/app/utils/types";
 
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
-    backgroundColor: "#f9fafb", 
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    backgroundColor: "#f9fafb",
     fontFamily: "Helvetica",
   },
+
   container: {
     margin: 20,
   },
+
   header: {
     fontSize: 24,
-    fontWeight: "bold", 
-    textAlign: "center", 
+    fontWeight: "bold",
+    textAlign: "center",
     marginBottom: 10,
   },
   contact: {
     fontSize: 12,
-    color: "#374151", 
+    color: "#000000",
     marginBottom: 5,
-    textAlign: "center", 
+    textAlign: "center",
   },
   section: {
+    paddingTop: 12,
     marginBottom: 20,
     paddingBottom: 10,
-    borderBottom: "1px solid #e5e7eb", 
+    borderBottom: "1px solid #e5e7eb",
   },
   subheader: {
     fontSize: 20,
-    fontWeight: "bold", 
-    borderBottom: "2px solid #374151", // Tailwind's border-gray-700
+    fontWeight: "bold",
+    borderBottom: "2px solid #374151",
     paddingBottom: 5,
     marginBottom: 10,
   },
   text: {
     fontSize: 12,
-    lineHeight: 1.5, 
+    lineHeight: 1.5,
   },
   list: {
     margin: 0,
@@ -60,104 +65,232 @@ const styles = StyleSheet.create({
     marginRight: 5,
     fontSize: 12,
     fontWeight: "bold",
-    color: "#374151", 
+    color: "#374151",
   },
+  twoColumn: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  column: {
+    width: "48%",
+  },
+  singleColumn: {
+    width: "100%",
+  },
+  contactColumn: {
+    display: "flex",
+    flexDirection: "column",
+  },
+  grid: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  gridItem: {
+    width: "23%",
+    marginRight: "1%",
+    marginBottom: 10,
+    fontSize: 12,
+    lineHeight: 1.5,
+  },
+  flexRow:{
+      display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: "8"
+  },
+  emplymentView: {
+    marginBottom:10
+  }
 });
-
 
 const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
   resumeDetails,
-}) => (
-  <Document>
-    <Page style={styles.page}>
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.header}>
-            {resumeDetails.firstName} {resumeDetails.lastName}
-          </Text>
-          {/* <Text render={({resumeDetails}) =>{
-              `${resumeDetails.firstName}`
-            }} style={styles.header}>
-            
-          </Text> */}
-          <Text style={styles.contact}>Email: john.doe@example.com</Text>
-          <Text style={styles.contact}>Phone: {resumeDetails.phone}</Text>
-          <Text style={styles.contact}>LinkedIn: linkedin.com/in/johndoe</Text>
-        </View>
-
-        {/* showing the section if the title exists */}
-        {resumeDetails.professionalSummaryTITLE && (
-          <View style={styles.section}>
-            <Text style={styles.subheader}>
-              {resumeDetails.professionalSummaryTITLE}
+}) => {
+  return (
+    <Document>
+      <Page style={styles.page}>
+        <View style={styles.container}>
+          <View>
+            <Text style={styles.header}>
+              {resumeDetails.firstName} {resumeDetails.lastName}
             </Text>
-            <Text style={styles.text}>{resumeDetails.professionalSummary}</Text>
+
+            {!resumeDetails.city && !resumeDetails.address && (
+              <View style={styles.contactColumn}>
+                <Text style={styles.contact}>Email: {resumeDetails.email}</Text>
+                <Text style={styles.contact}>Phone: {resumeDetails.phone}</Text>
+              </View>
+            )}
+
+            {resumeDetails.city && resumeDetails.address && (
+              <View style={styles.twoColumn}>
+                <View style={styles.column}>
+                  <View style={styles.contactColumn}>
+                    <Text style={styles.contact}>
+                      Email: {resumeDetails.email}
+                    </Text>
+                    <Text style={styles.contact}>
+                      Phone: {resumeDetails.phone}
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.column}>
+                  <View style={styles.contactColumn}>
+                    <Text style={styles.contact}>
+                      City: {resumeDetails.city}
+                    </Text>
+                    <Text style={styles.contact}>
+                      Address: {resumeDetails.address}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+
+            {((resumeDetails.city && !resumeDetails.address) ||
+              (!resumeDetails.city && resumeDetails.address)) && (
+              <View style={styles.singleColumn}>
+                <View style={styles.contactColumn}>
+                  <Text style={styles.contact}>
+                    Email: {resumeDetails.email}
+                  </Text>
+                  <Text style={styles.contact}>
+                    Phone: {resumeDetails.phone}
+                  </Text>
+                  {resumeDetails.city && (
+                    <Text style={styles.contact}>
+                      City: {resumeDetails.city}
+                    </Text>
+                  )}
+                  {resumeDetails.address && (
+                    <Text style={styles.contact}>
+                      Address: {resumeDetails.address}
+                    </Text>
+                  )}
+                </View>
+              </View>
+            )}
+
+            {resumeDetails.socialLinks?.length === 1 ? (
+              <Link style={styles.contact} src={`${resumeDetails.socialLinks}`}>
+                {resumeDetails.socialLinks}
+              </Link>
+            ) : (
+              <View style={styles.flexRow}>
+                {resumeDetails.socialLinks?.map((link) => {
+                  return (
+                    <Link style={styles.contact} src={link}>
+                      {link}{" "}
+                    </Link>
+                  );
+                })}
+              </View>
+            )}
           </View>
-        )}
 
-{resumeDetails.emplymentTITLE && (<View style={styles.section}>
-          <Text style={styles.subheader}>{resumeDetails.emplymentTITLE}</Text>
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: "bold" }}>Senior Developer</Text> -
-            Company A (Jan 2020 - Present)
-          </Text>
-          <View style={styles.list}>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> Developed and maintained web
-              applications using React and Node.js.
-            </Text>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> Led a team of 5 developers to
-              deliver projects on time and within budget.
-            </Text>
-          </View>
+          {resumeDetails.professionalSummaryTITLE && (
+            <View style={styles.section}>
+              <Text style={styles.subheader}>
+                {resumeDetails.professionalSummaryTITLE}
+              </Text>
+              <Text style={styles.text}>
+                {resumeDetails.professionalSummary}
+              </Text>
+            </View>
+          )}
 
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: "bold" }}>Software Engineer</Text> -
-            Company B (Jun 2017 - Dec 2019)
-          </Text>
-          <View style={styles.list}>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> Worked on backend services
-              and APIs using Python and Django.
-            </Text>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> Improved application
-              performance by 30% through code optimization.
-            </Text>
-          </View>
-        </View>)}
-        
+          {resumeDetails.emplymentTITLE && (
+            //! use flex and gap
 
-        <View style={styles.section}>
-          <Text style={styles.subheader}>Education</Text>
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: "bold" }}>B.Sc. Computer Science</Text> -
-            University X (2013 - 2017)
-          </Text>
-        </View>
+            <View style={styles.section}>
+              <Text style={styles.subheader}>
+                {resumeDetails.emplymentTITLE}
+              </Text>
+              {resumeDetails.employmentHistory?.map((eHistory, index) => (
+                <View key={index} style={styles.emplymentView}>
+                  <Text style={styles.text}>
+                    <Text style={styles.bullet}>• </Text>
+                    {eHistory.jobHistoryJobTitle} at{" "}
+                    {eHistory.jobHistoryEmployer}
+                    <Text>
+                      {", "}
+                      {eHistory.jobHistoryCity}
+                    </Text>
+                  </Text>
 
-  {resumeDetails.skillsTITLE && ( <View style={styles.section}>
-          <Text style={styles.subheader}>{resumeDetails.skillsTITLE }</Text>
-          <View style={styles.list}>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> JavaScript, React, Node.js
-            </Text>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> Python, Django
-            </Text>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> SQL, MongoDB
-            </Text>
-            <Text style={styles.listItem}>
-              <Text style={styles.bullet}>•</Text> Git, Docker
-            </Text>
-          </View>
-        </View>)}
-       
+                  <Text style={[styles.text, { marginLeft: 8 }]}>
+                    {eHistory.jobHistoryStartAndEndYear}
+                  </Text>
+                  <View style={styles.list}>
+                    <Text style={styles.listItem}>
+                      {eHistory.jobHistoryDescription}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
 
-        {/* Projects */}
-        <View style={styles.section}>
+          {resumeDetails.educationTITLE && (
+            //! use flex and gap
+
+            <View style={styles.section}>
+              <Text style={styles.subheader}>
+                {resumeDetails.educationTITLE}
+              </Text>
+              {resumeDetails.education?.map((education, index) => (
+                <View key={index} style={styles.emplymentView}>
+                  <Text style={styles.text}>
+                    <Text style={styles.bullet}>• </Text>
+                    {education.educationDegree} at {education.educationSchoold}
+                    <Text>
+                      {", "}
+                      {education.educationCity}
+                    </Text>
+                  </Text>
+
+                  <Text style={[styles.text, { marginLeft: 8 }]}>
+                    {education.educationStartAndEndYear}
+                  </Text>
+                  <View style={styles.list}>
+                    <Text style={styles.listItem}>
+                      {education.educationDescription}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
+
+          {/* {resumeDetails.educationTITLE && (
+            <View style={styles.section}>
+              <Text style={styles.subheader}>
+                {resumeDetails.educationTITLE}
+              </Text>
+              <Text style={styles.text}>{resumeDetails.education}</Text>
+            </View>
+          )} */}
+
+          {resumeDetails.skillsTITLE && (
+            <View style={styles.section}>
+              <Text style={styles.subheader}>{resumeDetails.skillsTITLE}</Text>
+              <View style={styles.list}>
+                <View style={styles.grid}>
+                  {resumeDetails?.skills?.map((skill, index) => (
+                    <Text style={styles.gridItem} key={index}>
+                      {skill}
+                    </Text>
+                  ))}
+                </View>
+              </View>
+            </View>
+          )}
+
+          {/* Projects */}
+          {/* <View style={styles.section}>
           <Text style={styles.subheader}>Projects</Text>
           <View style={styles.list}>
             <Text style={styles.listItem}>
@@ -173,10 +306,11 @@ const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
               real-time communication.
             </Text>
           </View>
+            </View> */}
         </View>
-      </View>
-    </Page>
-  </Document>
-);
+      </Page>
+    </Document>
+  );
+};
 
 export default PDFtemplate2;

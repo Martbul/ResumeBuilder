@@ -1,7 +1,9 @@
 import Image from "next/image";
 import images from "@/constants/images";
 import Link from "next/link";
+
 const allTemplates = () => {
+  
   return (
     <>
       <div>
@@ -20,8 +22,8 @@ const allTemplates = () => {
           <p>Modern</p>
         </div>
 
-        <div className="flex flex-row flex-wrap mx-20 justify-evenly">
-          <Link href="createResume/1">
+        <div className="flex flex-row flex-wrap lg:mx-72 justify-evenly">
+          <Link href="createResume/1" className="lg:my-12">
             <div className="bg-neutral-200 w-full sm:w-auto p-2">
               <div className="max-w-xs mx-auto">
                 {/* Removed w-full on the div */}
@@ -34,7 +36,7 @@ const allTemplates = () => {
             </div>
           </Link>
 
-          <Link href="createResume/2">
+          <Link href="createResume/2" className="lg:my-12">
             <div className="bg-neutral-200 w-full sm:w-auto p-2">
               <div className="max-w-xs mx-auto">
                 <Image
@@ -46,15 +48,39 @@ const allTemplates = () => {
             </div>
           </Link>
 
-          <div className="bg-neutral-200 w-full sm:w-auto p-2">
-            <div className="max-w-xs mx-auto">
-              <Image
-                src={images.template3}
-                alt="t3"
-                className="w-full h-auto object-contain hover:opacity-80"
-              />
+          <Link href="createResume/3" className="lg:my-12">
+            <div className="bg-neutral-200 w-full sm:w-auto p-2">
+              <div className="max-w-xs mx-auto">
+                <Image
+                  src={images.template3}
+                  alt="t3"
+                  className="w-full h-auto object-contain hover:opacity-80"
+                />
+              </div>
             </div>
-          </div>
+          </Link>
+          <Link href="createResume/4" className="lg:my-12">
+            <div className="bg-neutral-200 w-full sm:w-auto p-2">
+              <div className="max-w-xs mx-auto">
+                <Image
+                  src={images.template3}
+                  alt="t3"
+                  className="w-full h-auto object-contain hover:opacity-80"
+                />
+              </div>
+            </div>
+          </Link>
+          <Link href="createResume/5" className="lg:my-12">
+            <div className="bg-neutral-200 w-full sm:w-auto p-2">
+              <div className="max-w-xs mx-auto">
+                <Image
+                  src={images.template5}
+                  alt="t3"
+                  className="w-full h-auto object-contain hover:opacity-80"
+                />
+              </div>
+            </div>
+          </Link>
         </div>
       </div>
     </>
