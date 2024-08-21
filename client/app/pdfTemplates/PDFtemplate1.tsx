@@ -141,13 +141,20 @@ const PDFtemplate1: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
             <Text style={styles.contactText}>Email: {resumeDetails.email}</Text>
             <Text style={styles.contactText}>Phone: {resumeDetails.phone}</Text>
             {resumeDetails.socialLinks?.map((link, index) => (
-              <Link key={index} style={[styles.contactText, {color:"black", textDecoration:"none"}]} src={link}>
+              <Link
+                key={index}
+                style={[
+                  styles.contactText,
+                  { color: "black", textDecoration: "none" },
+                ]}
+                src={link}
+              >
                 {link}
               </Link>
             ))}
           </View>
         </View>
-        {resumeDetails.educationTITLE && (
+        {resumeDetails.educationTITLE !== "" && (
           <View style={[styles.section, { marginTop: 10 }]}>
             <Text style={styles.sectionHeader}>
               {resumeDetails.educationTITLE}
@@ -181,8 +188,8 @@ const PDFtemplate1: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
             })}
           </View>
         )}
-        
-        {resumeDetails.professionalSummaryTITLE && (
+
+        {resumeDetails.professionalSummaryTITLE !== "" && (
           <View style={styles.section}>
             <Text style={styles.subheader}>
               {resumeDetails.professionalSummaryTITLE}
@@ -191,7 +198,7 @@ const PDFtemplate1: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
           </View>
         )}
 
-        {resumeDetails.emplymentTITLE && (
+        {resumeDetails.emplymentTITLE !== "" && (
           <View style={styles.section}>
             <Text style={styles.sectionHeader}>
               {resumeDetails.emplymentTITLE}
@@ -227,7 +234,7 @@ const PDFtemplate1: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
           </View>
         )}
 
-        {resumeDetails.skillsTITLE && (
+        {resumeDetails.skillsTITLE !== "" && (
           <View style={styles.section}>
             <Text style={styles.subheader}>{resumeDetails.skillsTITLE}</Text>
             <View style={styles.list}>

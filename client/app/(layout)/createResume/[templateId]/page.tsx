@@ -861,8 +861,10 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
           </div>
         </section>
 
-        <section className="lg:w-1/2 bg-emerald-200 flex justify-center">
-          <PDFViewer className="flex lg:w-2/3 md:w-1/3" showToolbar={false}>
+        
+        {/* /!! if you cannot fix the rendering of the resume for mobile -> make a button for resume preview */}
+        <section className="lg:w-1/2  bg-emerald-200 flex justify-center">
+          <PDFViewer className="flex  lg:w-2/3 md:w-1/3" showToolbar={false}>
             {renderTemplate(templateId, resumeDetails)}
           </PDFViewer>
         </section>

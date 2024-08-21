@@ -67,30 +67,37 @@ export default function Home() {
       </section>
 
       <section className="bg-neutral-100">
-        <div className="lg:p-40 flex flex-col items-center gap-24">
+        <div className="lg:p-40 flex flex-col items-center lg:gap-24 py-10">
           <div>
-            <h1 className="lg:text-4xl lg:font-bold">
+            <h1 className="lg:text-4xl lg:font-bold my-4 font-semibold text-xl">
               Frequently Asked Questions
             </h1>
           </div>
           <div className="lg:w-3/5">
             <Accordion type="single" collapsible className="w-full">
               <AccordionItem value="item-1">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
+                <AccordionTrigger className="w-72 lg:w-full ">
+                  Is it accessible?
+                </AccordionTrigger>
+                <AccordionContent className="w-72 lg:w-full ">
                   Yes. It adheres to the WAI-ARIA design pattern.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
-                <AccordionTrigger>Is it styled?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It comes with default styles that matches the other
-                  components&apos; aesthetic.
+                <AccordionTrigger className="w-72 lg:w-full ">
+                  How to customize my resume?
+                </AccordionTrigger>
+                <AccordionContent className="w-72 lg:w-full ">
+                  Our resume templates are designed to adapt to your content and
+                  look great across all of our designs. Learn more in this
+                  article.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3">
-                <AccordionTrigger>Is it animated?</AccordionTrigger>
-                <AccordionContent>
+                <AccordionTrigger className="w-72 lg:w-full ">
+                  Is it animated?
+                </AccordionTrigger>
+                <AccordionContent className="w-72 lg:w-full ">
                   Yes. It's animated by default, but you can disable it if you
                   prefer.
                 </AccordionContent>
@@ -101,12 +108,15 @@ export default function Home() {
       </section>
 
       <section className="bg-emerald-400">
-        <div className="flex lg:p-40 lg:hidden p-8">
-          <Image src={images.CV3Main} alt="3cv" className="" />
+        <div className="flex justify-center lg:p-40 lg:hidden p-8">
+          <Image
+            src={images.CV3Main}
+            alt="3cv"
+            className="min-w-72 max-w-md mx-16"
+          />
         </div>
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:px-40 lg:p-40 lg:gap-40 p-8">
+        <div className="flex flex-col lg:flex-row items-center lg:items-center lg:justify-center lg:px-40 lg:p-40 lg:gap-28 p-8">
           <motion.div
-            className="relative w-full max-w-sm sm:max-w-md lg:max-w-2xl overflow-hidden"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: "easeOut" }}
@@ -128,9 +138,13 @@ export default function Home() {
                 interview can be much easier if they have a favorable view of
                 your resume and cover letter.
               </p>
-              <div className="flex flex-row mt-4 max-w-48 lg:flex-row gap-6">
-                <Button>Get Started Now</Button>
-                <Button>Resume Examples</Button>
+              <div className="flex flex-row justify-center mt-4 lg:justify-start gap-6">
+                <Button className="text-xs max-w-28 lg:max-w-72 lg:text-base">
+                  Get Started Now
+                </Button>
+                <Button className=" text-xs max-w-28 lg:max-w-72 lg:text-base">
+                  Resume Examples
+                </Button>
               </div>
             </div>
           </motion.div>
@@ -146,7 +160,9 @@ export default function Home() {
           </h1>
           <p className="lg:my-2 mb-8 lg:text-lg">Absolutely FREE</p>
           <Button className="lg:mt-16 lg:p-8 lg:text-lg">
-            Create My Resume
+            <Link href="allTemplates" className="w-full text-center">
+              Create My Resume
+            </Link>
           </Button>
         </div>
       </section>

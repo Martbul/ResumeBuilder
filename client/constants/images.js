@@ -8,6 +8,7 @@ import template4 from "../public/template4.png";
 import template5 from "../public/template5.png";
 import template7 from "../public/template7.png";
 import CV3Main from "../public/CV3Main.jpeg";
+import logo from "../public/logo.png";
 
 export default {
   mainResume,
@@ -19,4 +20,5 @@ export default {
   template4,
   template5,
   template7,
+  logo,
 };
