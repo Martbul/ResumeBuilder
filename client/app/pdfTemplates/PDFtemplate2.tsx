@@ -265,15 +265,6 @@ const PDFtemplate2: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
             </View>
           )}
 
-          {/* {resumeDetails.educationTITLE && (
-            <View style={styles.section}>
-              <Text style={styles.subheader}>
-                {resumeDetails.educationTITLE}
-              </Text>
-              <Text style={styles.text}>{resumeDetails.education}</Text>
-            </View>
-          )} */}
-
           {resumeDetails.skillsTITLE && (
             <View style={styles.section}>
               <Text style={styles.subheader}>{resumeDetails.skillsTITLE}</Text>

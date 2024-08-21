@@ -6,9 +6,13 @@ import PDFtemplate3 from "@/app/pdfTemplates/PDFtemplate3";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { pdf } from "@react-pdf/renderer";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import debounce from "lodash.debounce";
-import type { ResumeDeatilsFormData } from "@/app/utils/types";
+import type {
+  ResumeDeatilsFormData,
+  EducationInterface,
+  EmploymentHistory,
+} from "@/app/utils/types";
 import { Button } from "@/components/ui/button";
 import dynamic from "next/dynamic";
 import { saveAs } from "file-saver";
@@ -18,6 +22,7 @@ import {
   SummaryIcon,
   LinksIcon,
   SkillsStarIcon,
+  LanguageIcon,
 } from "@/app/utils/svg";
 import PDFtemplate5 from "@/app/pdfTemplates/PDFtemplate5";
 import PDFtemplate4 from "@/app/pdfTemplates/PDFtemplate4";
@@ -36,13 +41,94 @@ const PDFViewer = dynamic(
 );
 
 const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
-  //! based on the templateId show the sections about ProfilePic/ aboutme/skill/projects ...
   const { templateId } = params;
+
+  useEffect(() => {
+    if (templateId === "1") {
+         setForRender((prevState) => ({
+           ...prevState,
+           firstNameRender: true,
+           lastNameRender: true,
+           ageRender: true,
+           photoRender: false,
+           emailRender: true,
+           phoneRender: true,
+           cityRender: false,
+           addressRender: false,
+           dateOfBirthRender: true,
+           professionalSummaryRender: true,
+           professionalSummaryTITLERender: true,
+           emplymentTITLERender: true,
+           socialLinksTITLERender: true,
+           skillsTITLERender: true,
+           languagesTITLERender: true,
+           educationTITLERender: true,
+           employmentHistoryRender: true,
+           educationRender: true,
+           socialLinksRender: true,
+           skillsRender: true,
+           languagesRender: false,
+         }));
+    } else if (templateId === "2") {
+      setForRender((prevState) => ({
+        ...prevState,
+        firstNameRender: true,
+        lastNameRender: true,
+        ageRender: true,
+        photoRender: false,
+        emailRender: true,
+        phoneRender: true,
+        cityRender: true,
+        addressRender: true,
+        dateOfBirthRender: true,
+        professionalSummaryRender: true,
+        professionalSummaryTITLERender: true,
+        emplymentTITLERender: true,
+        socialLinksTITLERender: true,
+        skillsTITLERender: true,
+        languagesTITLERender: true,
+        educationTITLERender: true,
+        employmentHistoryRender: true,
+        educationRender: true,
+        socialLinksRender: true,
+        skillsRender: true,
+        languagesRender: false,
+      }));
+    } else if (templateId === "3") {
+    } else if (templateId === "4") {
+    } else if (templateId === "5") {
+      setForRender((prevState) => ({
+        ...prevState,
+        firstNameRender: true,
+        lastNameRender: true,
+        ageRender: true,
+        photoRender: true,
+        emailRender: true,
+        phoneRender: true,
+        cityRender: true,
+        addressRender: true,
+        dateOfBirthRender: true,
+        professionalSummaryRender: true,
+        professionalSummaryTITLERender: true,
+        emplymentTITLERender: true,
+        socialLinksTITLERender: true,
+        skillsTITLERender: true,
+        languagesTITLERender: true,
+        educationTITLERender: true,
+        employmentHistoryRender: true,
+        educationRender: true,
+        socialLinksRender: true,
+        skillsRender: true,
+        languagesRender: true,
+      }));
+    } else if (templateId === "6") {
+    }
+  }, [templateId]);
   const [resumeDetails, setResumeDetails] = useState<ResumeDeatilsFormData>({
     firstName: "John",
     lastName: "Doe",
     age: 20,
-    photo: "",
+    photo: null,
     email: "johnDoe@gmail.com",
     phone: "+359 888571991",
     city: "",
@@ -54,24 +140,62 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
     socialLinksTITLE: "Social Links",
     skillsTITLE: "Skills",
     educationTITLE: "Education",
+    languagesTITLE: "Languages",
     employmentHistory: [],
     education: [],
     socialLinks: [],
     skills: [],
+    languages: [],
+    imagePreviewUrl:"",
+  });
+// const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+
+  const [forRender, setForRender] = useState({
+    firstNameRender: false,
+    lastNameRender: false,
+    ageRender: false,
+    photoRender: false,
+    emailRender: false,
+    phoneRender: false,
+    cityRender: false,
+    addressRender: false,
+    dateOfBirthRender: false,
+    professionalSummaryRender: false,
+    professionalSummaryTITLERender: false,
+    emplymentTITLERender: false,
+    socialLinksTITLERender: false,
+    skillsTITLERender: false,
+    languagesTITLERender: false,
+    educationTITLERender: false,
+    employmentHistoryRender: false,
+    educationRender: false,
+    socialLinksRender: false,
+    skillsRender: false,
+    languagesRender: false,
   });
 
   const handleInputChange = useCallback(
-    debounce((id: string, value: string, index?: number) => {
+    debounce((id: string, value: string, files?: FileList, index?: number) => {
       setResumeDetails((prevDetails) => {
-        
-        if (id === "socialLinks" || id === "skills") {
-          if (id === "socialLinks" || id === "skills") {
-            const stringArray = value.split(",").map((item) => item.trim());
-            return {
-              ...prevDetails,
-              [id]: stringArray,
-            };
-          }
+        if (id === "picture" && files && files.length > 0) {
+          const file = files[0];
+
+          // Create a URL for the image preview
+          const imageUrl = URL.createObjectURL(file);
+
+          // Update the state with the file and the preview URL
+          return {
+            ...prevDetails,
+            photo: file, // Store the file
+            imagePreviewUrl: imageUrl, // Store the preview URL
+          };
+        }
+        if (id === "socialLinks" || id === "skills" || id === "languages") {
+          const stringArray = value.split(",").map((item) => item.trim());
+          return {
+            ...prevDetails,
+            [id]: stringArray,
+          };
         }
 
         if (
@@ -81,22 +205,20 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
           id == "jobHistoryCity" ||
           id == "jobHistoryDescription"
         ) {
-         return {
-           ...prevDetails,
-           employmentHistory: prevDetails.employmentHistory.map((item, i) => {
-             if (i === index) {
-               return {
-                 ...item,
-                 [id]: value, 
-               };
-             }
-             return item; 
-           }),
-         };
+          return {
+            ...prevDetails,
+            employmentHistory: prevDetails.employmentHistory.map((item, i) => {
+              if (i === index) {
+                return {
+                  ...item,
+                  [id]: value,
+                };
+              }
+              return item;
+            }),
+          };
         }
-      
-    
-      
+
         if (
           id === "educationSchoold" ||
           id === "educationDegree" ||
@@ -127,14 +249,12 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
     []
   );
 
+ const onChange = (e: React.ChangeEvent<HTMLInputElement>, index?: number) => {
+   const { id, value, files } = e.target;
 
-
-
-  const onChange = (e:React.ChangeEvent<HTMLInputElement>, index?:number) => {
-    
-    const { id, value } = e.target
-    handleInputChange(id, value, index);
-  };
+     handleInputChange(id, value,files, index);
+ 
+ };
 
   const downloadTemplate = (templateId: string) => {
     switch (templateId) {
@@ -171,22 +291,17 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
       jobHistoryDescription: "",
     };
 
-    
     setResumeDetails((prevDetails) => {
-      // if (prevDetails.employmentHistory === undefined) return
       return {
         ...prevDetails,
         employmentHistory: [
-          ...prevDetails.employmentHistory,
+          ...(prevDetails.employmentHistory as EmploymentHistory[]),
           newEmpltyEmpoymentObj,
         ],
       };
     });
   };
- 
 
-  
-  
   const addNewEducation = () => {
     const newEmpltyEducationObj = {
       educationSchoold: "",
@@ -197,13 +312,11 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
     };
 
     setResumeDetails((prevDetails) => {
- 
       return {
         ...prevDetails,
         education: [
-          ...prevDetails.education,
-          newEmpltyEducationObj
-          
+          ...(prevDetails.education as EducationInterface[]),
+          newEmpltyEducationObj,
         ],
       };
     });
@@ -214,385 +327,459 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
       <main className="flex lg:flex-row h-screen flex-col">
         <section className="lg:w-1/2 lg:px-36 px-20 lg:overflow-y-auto no-scrollbar">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 my-10">
-            <div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="firstName">First Name</Label>
-                <Input
-                  type="text"
-                  id="firstName"
-                  placeholder="John"
-                  onChange={onChange}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="lastName">Last Name</Label>
-                <Input
-                  type="text"
-                  id="lastName"
-                  placeholder="Doe"
-                  onChange={onChange}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  placeholder="johnDoe@gmail.com"
-                  onChange={onChange}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="phone">Phone</Label>
-                <Input
-                  type="text"
-                  id="phone"
-                  placeholder="+359 888571991"
-                  onChange={onChange}
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <div className="flex flex-row items-center gap-1">
-                  <Label htmlFor="city">City</Label>
-                  <p className="text-sm text-zinc-500	">{`(optional)`}</p>
+            {forRender.firstNameRender && (
+              <div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <Input
+                    type="text"
+                    id="firstName"
+                    placeholder="John"
+                    onChange={onChange}
+                  />
                 </div>
-                <Input
-                  type="text"
-                  id="city"
-                  placeholder="New York"
-                  onChange={onChange}
-                />
               </div>
-            </div>
-
-            <div>
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <div className="flex flex-row items-center gap-1">
-                  <Label htmlFor="address">Address</Label>
-                  <p className="text-sm text-zinc-500	">{`(optional)`}</p>
+            )}
+            {forRender.lastNameRender && (
+              <div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <Input
+                    type="text"
+                    id="lastName"
+                    placeholder="Doe"
+                    onChange={onChange}
+                  />
                 </div>
-                <Input
-                  type="text"
-                  id="address"
-                  placeholder="123 Main St"
-                  onChange={onChange}
-                />
               </div>
-            </div>
-          </div>
+            )}
 
-          <div className="my-8">
-            <div className="flex items-center">
-              <SummaryIcon className="w-6 h-6" />
-              <h2 className="text-lg font-semibold">
-                {" "}
-                <Input
-                  type="text"
-                  id="professionalSummaryTITLE"
-                  onChange={onChange}
-                  className="lg:text-lg  lg:h-12 border-none focus:outline-none"
-                  defaultValue={resumeDetails.professionalSummaryTITLE}
-                />
-              </h2>
-            </div>
+            {forRender.emailRender && (
+              <div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    placeholder="johnDoe@gmail.com"
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+            )}
 
-            <p className="mb-2">
-              Write 2-4 short, energetic sentences about your achievements and
-              motivation.
-            </p>
-            <Input
-              type="text"
-              id="professionalSummary"
-              placeholder="Experienced writer with a record of..."
-              onChange={onChange}
-              className="lg:h-24"
-            />
-          </div>
+            {forRender.phoneRender && (
+              <div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    type="text"
+                    id="phone"
+                    placeholder="+359 888571991"
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+            )}
+            {forRender.cityRender && (
+              <div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <div className="flex flex-row items-center gap-1">
+                    <Label htmlFor="city">City</Label>
+                    <p className="text-sm text-zinc-500">{`(optional)`}</p>
+                  </div>
+                  <Input
+                    type="text"
+                    id="city"
+                    placeholder="New York"
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+            )}
 
-          <div className="my-8">
-            <div className="flex items-center">
-              <WorkSuitCaseIcon className="w-6 h-6" />
-              <h2 className="text-lg font-semibold">
-                {" "}
-                <Input
-                  type="text"
-                  id="emplymentTITLE"
-                  onChange={onChange}
-                  className="lg:text-lg lg:h-12 border-none focus:outline-none"
-                  defaultValue={resumeDetails.emplymentTITLE}
-                />
-              </h2>
-            </div>
+            {forRender.addressRender && (
+              <div>
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <div className="flex flex-row items-center gap-1">
+                    <Label htmlFor="address">Address</Label>
+                    <p className="text-sm text-zinc-500">{`(optional)`}</p>
+                  </div>
+                  <Input
+                    type="text"
+                    id="address"
+                    placeholder="123 Main St"
+                    onChange={onChange}
+                  />
+                </div>
+              </div>
+            )}
 
-            <p className="mb-2">
-              Mention the role and what you did. List your key achievements.
-            </p>
+            {forRender.photoRender && (
+              <div className="col-span-full flex justify-center">
+                <div className="grid w-full max-w-sm items-center gap-1.5">
+                  <Label htmlFor="picture">Picture</Label>
+                  <Input id="picture" type="file" onChange={onChange} />
 
-            <div>
-              {resumeDetails?.employmentHistory?.length > 0 &&
-                resumeDetails.employmentHistory?.map((eHistory, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="bg-neutral-100 p-6 rounded-xl my-4"
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="jobHistoryJobTitle">
-                              Job Title
-                            </Label>
-                            <Input
-                              type="text"
-                              id="jobHistoryJobTitle"
-                              placeholder="Manager"
-                              onChange={(e) => onChange(e, index)}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="jobHistoryEmployer">Employer</Label>
-                            <Input
-                              type="text"
-                              id="jobHistoryEmployer"
-                              placeholder="Google"
-                              onChange={(e) => onChange(e, index)}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="jobHistoryStartAndEndYear">
-                              Start & End Year
-                            </Label>
-                            <Input
-                              type="email"
-                              id="jobHistoryStartAndEndYear"
-                              placeholder="2020 - 2024"
-                              onChange={(e) => onChange(e, index)}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="jobHistoryCity">City</Label>
-                            <Input
-                              type="email"
-                              id="jobHistoryCity"
-                              placeholder="New York"
-                              onChange={(e) => onChange(e, index)}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="mt-4">
-                        <div className="grid w-full items-center ">
-                          <Label
-                            htmlFor="jobHistoryDescription"
-                            className="lg:mb-2"
-                          >
-                            Description
-                          </Label>
-                          <Input
-                            type="text"
-                            id="jobHistoryDescription"
-                            placeholder="Improved the yearly reveneu by 30% by implementing..."
-                            className="w-full lg:h-24"
-                            onChange={(e) => onChange(e, index)}
-                          />
-                        </div>
-                      </div>
+                  {resumeDetails.imagePreviewUrl && (
+                    <div className="mt-4">
+                      <img
+                        src={resumeDetails.imagePreviewUrl}
+                        alt="Selected Preview"
+                        className="h-32 w-32 object-cover rounded-full"
+                      />
                     </div>
-                  );
-                })}
-            </div>
-
-            <Button className="text-sm my-4" onClick={addNewEmplymentHistory}>
-              + Add employment
-            </Button>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
+          {forRender.professionalSummaryRender && (
+            <div className="my-8">
+              <div className="flex items-center">
+                <SummaryIcon className="w-6 h-6" />
+                <h2 className="text-lg font-semibold">
+                  {" "}
+                  <Input
+                    type="text"
+                    id="professionalSummaryTITLE"
+                    onChange={onChange}
+                    className="lg:text-lg  lg:h-12 border-none focus:outline-none"
+                    defaultValue={resumeDetails.professionalSummaryTITLE}
+                  />
+                </h2>
+              </div>
 
-
-          <div className="my-8">
-            <div className="flex items-center">
-              <EducationHatIcon className="w-8 h-8" />
-              <h2 className="text-lg font-semibold">
-                <Input
-                  type="text"
-                  id="educationTITLE"
-                  onChange={onChange}
-                  className="lg:text-lg lg:h-12 border-none focus:outline-none"
-                  defaultValue={resumeDetails.educationTITLE}
-                />
-              </h2>
+              <p className="mb-2">
+                Write 2-4 short, energetic sentences about your achievements and
+                motivation.
+              </p>
+              <Input
+                type="text"
+                id="professionalSummary"
+                placeholder="Experienced writer with a record of..."
+                onChange={onChange}
+                className="lg:h-24"
+              />
             </div>
+          )}
 
-            <p className="mb-2">
-              Mention the role and what you did. List your key achievements.
-            </p>
+          {forRender.employmentHistoryRender && (
+            <div className="my-8">
+              <div className="flex items-center">
+                <WorkSuitCaseIcon className="w-6 h-6" />
+                <h2 className="text-lg font-semibold">
+                  {" "}
+                  <Input
+                    type="text"
+                    id="emplymentTITLE"
+                    onChange={onChange}
+                    className="lg:text-lg lg:h-12 border-none focus:outline-none"
+                    defaultValue={resumeDetails.emplymentTITLE}
+                  />
+                </h2>
+              </div>
 
-            
+              <p className="mb-2">
+                Mention the role and what you did. List your key achievements.
+              </p>
 
+              <div>
+                {resumeDetails?.employmentHistory?.length > 0 &&
+                  resumeDetails.employmentHistory?.map((eHistory, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="bg-neutral-100 p-6 rounded-xl my-4"
+                      >
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <Label htmlFor="jobHistoryJobTitle">
+                                Job Title
+                              </Label>
+                              <Input
+                                type="text"
+                                id="jobHistoryJobTitle"
+                                placeholder="Manager"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
 
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <Label htmlFor="jobHistoryEmployer">
+                                Employer
+                              </Label>
+                              <Input
+                                type="text"
+                                id="jobHistoryEmployer"
+                                placeholder="Google"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
 
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <div className="flex flex-row items-center gap-1">
+                                <Label htmlFor="jobHistoryStartAndEndYear">
+                                  Start & End Year
+                                </Label>
+                                <p className="text-sm text-zinc-500">{`(optional)`}</p>
+                              </div>
+                              <Input
+                                type="email"
+                                id="jobHistoryStartAndEndYear"
+                                placeholder="2020 - 2024"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
 
-            <div>
-              {resumeDetails?.education?.length > 0 &&
-                resumeDetails.education?.map((education, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="bg-neutral-100 p-6 rounded-xl my-4"
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="educationSchoold">School</Label>
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <div className="flex flex-row items-center gap-1">
+                                <Label htmlFor="jobHistoryCity">City</Label>
+                                <p className="text-sm text-zinc-500">{`(optional)`}</p>
+                              </div>
+                              <Input
+                                type="email"
+                                id="jobHistoryCity"
+                                placeholder="New York"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <div className="grid w-full items-center ">
+                            <div className="flex flex-row items-center gap-1">
+                              <Label htmlFor="jobHistoryDescription">
+                                Description
+                              </Label>
+                              <p className="text-sm text-zinc-500">{`(optional)`}</p>
+                            </div>
                             <Input
                               type="text"
-                              id="educationSchoold"
-                              placeholder="Harvard"
-                              onChange={(e) => onChange(e, index)}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="educationDegree">Degree</Label>
-                            <Input
-                              type="text"
-                              id="educationDegree"
-                              placeholder="Computer Science"
-                              onChange={(e) => onChange(e, index)}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="educationStartAndEndYear">
-                              Start & End Year
-                            </Label>
-                            <Input
-                              type="email"
-                              id="educationStartAndEndYear"
-                              placeholder="2020 - 2024"
-                              onChange={(e) => onChange(e, index)}
-                            />
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="grid w-full max-w-sm items-center gap-1.5">
-                            <Label htmlFor="educationCity">City</Label>
-                            <Input
-                              type="email"
-                              id="educationCity"
-                              placeholder="Massachusetts"
+                              id="jobHistoryDescription"
+                              placeholder="Improved the yearly reveneu by 30% by implementing..."
+                              className="w-full lg:h-24"
                               onChange={(e) => onChange(e, index)}
                             />
                           </div>
                         </div>
                       </div>
-                      <div className="mt-4">
-                        <div className="grid w-full items-center ">
-                          <Label
-                            htmlFor="educationDescription"
-                            className="lg:mb-2"
-                          >
-                            Description
-                          </Label>
-                          <Input
-                            type="text"
-                            id="educationDescription"
-                            placeholder="Improved the yearly reveneu by 30% by implementing..."
-                            className="w-full lg:h-24"
-                            onChange={(e) => onChange(e, index)}
-                          />
+                    );
+                  })}
+              </div>
+
+              <Button className="text-sm my-4" onClick={addNewEmplymentHistory}>
+                + Add employment
+              </Button>
+            </div>
+          )}
+
+          {forRender.educationRender && (
+            <div className="my-8">
+              <div className="flex items-center">
+                <EducationHatIcon className="w-8 h-8" />
+                <h2 className="text-lg font-semibold">
+                  <Input
+                    type="text"
+                    id="educationTITLE"
+                    onChange={onChange}
+                    className="lg:text-lg lg:h-12 border-none focus:outline-none"
+                    defaultValue={resumeDetails.educationTITLE}
+                  />
+                </h2>
+              </div>
+
+              <p className="mb-2">
+                Mention the role and what you did. List your key achievements.
+              </p>
+
+              <div>
+                {resumeDetails?.education?.length > 0 &&
+                  resumeDetails.education?.map((education, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="bg-neutral-100 p-6 rounded-xl my-4"
+                      >
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <Label htmlFor="educationSchoold">School</Label>
+                              <Input
+                                type="text"
+                                id="educationSchoold"
+                                placeholder="Harvard"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <Label htmlFor="educationDegree">Degree</Label>
+                              <Input
+                                type="text"
+                                id="educationDegree"
+                                placeholder="Computer Science"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <Label htmlFor="educationStartAndEndYear">
+                                Start & End Year
+                              </Label>
+                              <Input
+                                type="email"
+                                id="educationStartAndEndYear"
+                                placeholder="2020 - 2024"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="grid w-full max-w-sm items-center gap-1.5">
+                              <div className="flex flex-row items-center gap-1">
+                                <Label htmlFor="educationCity">City</Label>
+                                <p className="text-sm text-zinc-500">{`(optional)`}</p>
+                              </div>
+                              <Input
+                                type="email"
+                                id="educationCity"
+                                placeholder="Massachusetts"
+                                onChange={(e) => onChange(e, index)}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-4">
+                          <div className="grid w-full items-center ">
+                          
+
+                            <div className="flex flex-row items-center gap-1">
+                              <Label htmlFor="educationDescription">
+                                Description
+                              </Label>
+                              <p className="text-sm text-zinc-500">{`(optional)`}</p>
+                            </div>
+                            <Input
+                              type="text"
+                              id="educationDescription"
+                              placeholder="Improved the yearly reveneu by 30% by implementing..."
+                              className="w-full lg:h-24"
+                              onChange={(e) => onChange(e, index)}
+                            />
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+              </div>
+
+              <Button className="text-sm my-4" onClick={addNewEducation}>
+                + Add education
+              </Button>
             </div>
+          )}
 
-            <Button className="text-sm my-4" onClick={addNewEducation}>
-              + Add education
-            </Button>
-          </div>
+          {forRender.socialLinksRender && (
+            <div className="my-8">
+              <div className="flex flex-row items-center">
+                <LinksIcon className="w-6 h-6" />
 
-          <div className="my-8">
-            <div className="flex flex-row items-center">
-              <LinksIcon className="w-6 h-6" />
+                <h2 className="text-lg font-semibold">
+                  {" "}
+                  <Input
+                    type="text"
+                    id="socialLinksTITLE"
+                    onChange={onChange}
+                    className="lg:text-lg lg:h-12 border-none focus:outline-none"
+                    defaultValue={resumeDetails.socialLinksTITLE}
+                  />
+                </h2>
+              </div>
 
-              <h2 className="text-lg font-semibold">
-                {" "}
-                <Input
-                  type="text"
-                  id="socialLinksTITLE"
-                  onChange={onChange}
-                  className="lg:text-lg lg:h-12 border-none focus:outline-none"
-                  defaultValue={resumeDetails.socialLinksTITLE}
-                />
-              </h2>
+              <p className="mb-2">
+                Add links to your social profiles or personal website.
+              </p>
+              <Input
+                type="text"
+                id="socialLinks"
+                placeholder="LinkedIn, GitHub, etc."
+                onChange={onChange}
+              />
             </div>
+          )}
 
-            <p className="mb-2">
-              Add links to your social profiles or personal website.
-            </p>
-            <Input
-              type="text"
-              id="socialLinks"
-              placeholder="LinkedIn, GitHub, etc."
-              onChange={onChange}
-            />
-          </div>
+          {forRender.skillsRender && (
+            <div className="my-8">
+              <div className="flex flex-row items-center">
+                <SkillsStarIcon className="w-8 h-8" />
 
-          <div className="my-8">
-            <div className="flex flex-row items-center">
-              <SkillsStarIcon className="w-8 h-8" />
+                <h2 className="text-lg font-semibold">
+                  {" "}
+                  <Input
+                    type="text"
+                    id="skillsTITLE"
+                    onChange={onChange}
+                    className="lg:text-lg lg:h-12 border-none  focus:outline-none "
+                    defaultValue={resumeDetails.skillsTITLE}
+                  />
+                </h2>
+              </div>
 
-              <h2 className="text-lg font-semibold">
-                {" "}
-                <Input
-                  type="text"
-                  id="skillsTITLE"
-                  onChange={onChange}
-                  className="lg:text-lg lg:h-12 border-none  focus:outline-none "
-                  defaultValue={resumeDetails.skillsTITLE}
-                />
-              </h2>
+              <p className="mb-2">
+                List your most important professional skills.
+              </p>
+
+              <Input
+                type="text"
+                id="skills"
+                placeholder="Skill 1, Skill 2, etc."
+                onChange={onChange}
+              />
             </div>
+          )}
 
-            <p className="mb-2">
-              List your most important professional skills.
-            </p>
+          {forRender.languagesRender && (
+            <div className="my-8">
+              <div className="flex flex-row items-center">
+                <LanguageIcon className="w-9 h-9" />
 
-            <Input
-              type="text"
-              id="skills"
-              placeholder="Skill 1, Skill 2, etc."
-              onChange={onChange}
-            />
-          </div>
+                <h2 className="text-lg font-semibold">
+                  {" "}
+                  <Input
+                    type="text"
+                    id="languagesTITLE"
+                    onChange={onChange}
+                    className="lg:text-lg lg:h-12 border-none  focus:outline-none "
+                    defaultValue={resumeDetails.languagesTITLE}
+                  />
+                </h2>
+              </div>
+
+              <p className="mb-2">Languages Spoken</p>
+
+              <Input
+                type="text"
+                id="languages"
+                placeholder="German, spanish, french..."
+                onChange={onChange}
+              />
+            </div>
+          )}
+
           <div className="mb-8 flex justify-end">
             <Button onClick={handleDownloadPDF}>Download CV</Button>
           </div>

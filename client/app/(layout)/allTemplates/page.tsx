@@ -1,11 +1,14 @@
 import Image from "next/image";
 import images from "@/constants/images";
 import Link from "next/link";
+import Navaigation from "@/components/navigation/Navigation";
 
 const allTemplates = () => {
   
   return (
     <>
+      <Navaigation />
+
       <div>
         <div className="flex flex-col items-center my-10">
           <h1 className="text-4xl my-4">Find the perfect template</h1>

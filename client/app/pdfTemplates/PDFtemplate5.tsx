@@ -1,13 +1,11 @@
 import React from "react";
 import {
-  PDFViewer,
   Document,
   Page,
   Text,
   View,
   StyleSheet,
   Image,
-  Font,
   Link
 } from "@react-pdf/renderer";
 
@@ -19,6 +17,12 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Helvetica",
     color: "#333",
+  },
+  contact: {
+    fontSize: 11,
+    color: "#000000",
+    marginBottom: 5,
+    textAlign: "center",
   },
   header: {
     flexDirection: "row",
@@ -33,12 +37,21 @@ const styles = StyleSheet.create({
     width: "65%",
     paddingLeft: 10,
   },
-  photo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
-  },
+  // photo: {
+  //   width: 100,
+  //   height: 100,
+  //   borderRadius: 50,
+  //   marginBottom: 10,
+  // },
+
+photo :{
+  width: "84em",
+  height: "84em",
+  objectFit: "cover",
+  borderRadius: 50, 
+  marginBottom: 10,
+},
+
   name: {
     fontSize: 20,
     fontWeight: "bold",
@@ -59,9 +72,20 @@ const styles = StyleSheet.create({
     borderBottom: "1 solid #e0e0e0",
     paddingBottom: 5,
   },
+  employmentSectionTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+    marginBottom: 5,
+    marginTop: 20,
+    borderBottom: "1 solid #e0e0e0",
+    paddingBottom: 5,
+  },
   text: {
     marginBottom: 5,
     lineHeight: 1.5,
+  },
+  jobDescrText: {
+    lineHeight: 1,
   },
   listItem: {
     marginBottom: 3,
@@ -74,130 +98,160 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: 5,
   },
+  list: {
+    margin: 0,
+    padding: 0,
+    listStyleType: "none",
+  },
+  emplymentView: {
+    marginBottom: 10,
+  },
+  subheader: {
+    fontSize: 20,
+    fontWeight: "bold",
+    borderBottom: "2px solid #374151",
+    paddingBottom: 5,
+    marginBottom: 10,
+  },
+  section: {
+    paddingTop: 12,
+    marginBottom: 20,
+    paddingBottom: 10,
+    borderBottom: "1px solid #e5e7eb",
+  },
 });
-// Create a CV component with a two-column layout
-const PDFtemplate5: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = () => (
+
+const PDFtemplate5: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
+  resumeDetails,
+}) => (
   <Document>
     <Page size="A4" style={styles.page}>
       <View style={styles.header}>
-        {/* Left Column */}
         <View style={styles.leftColumn}>
           <Image
             style={styles.photo}
-            src="https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
+            src={
+              resumeDetails.imagePreviewUrl ||
+              "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
+            }
           />
-          <Text style={styles.name}>Name and Surname</Text>
-          <Text style={styles.jobTitle}>Job Title</Text>
+          <Text style={styles.name}>
+            {resumeDetails.firstName} {resumeDetails.lastName}
+          </Text>
+
 
           <View style={styles.contactItem}>
-            <Text style={styles.iconText}>
-              <Text style={styles.icon}>📍</Text>
-              Personal Address
-            </Text>
-            <Text style={styles.text}>Personal Address</Text>
+            <Text style={styles.iconText}>{resumeDetails.email}</Text>
           </View>
 
           <View style={styles.contactItem}>
-            <Text style={styles.iconText}>
-              <Text style={styles.icon}>📧</Text>
-              example@gmail.com
-            </Text>
+            <Text style={styles.iconText}>{resumeDetails.phone}</Text>
           </View>
 
-          <View style={styles.contactItem}>
-            <Text style={styles.iconText}>
-              <Text style={styles.icon}>📞</Text>
-              06 01 02 03 04
-            </Text>
-          </View>
+          {/* <View style={styles.contactItem}>
+            <Text style={styles.iconText}>{resumeDetails.dateOfBirth}</Text>
+          </View> */}
+          {resumeDetails.city && (
+            <View style={styles.contactItem}>
+              <Text style={styles.iconText}>{resumeDetails.city}</Text>
+            </View>
+          )}
+          {resumeDetails.address && (
+            <View style={styles.contactItem}>
+              <Text style={styles.iconText}>{resumeDetails.address}</Text>
+            </View>
+          )}
 
-          <View style={styles.contactItem}>
-            <Text style={styles.iconText}>
-              <Text style={styles.icon}>🎂</Text>
-              Date of birth: 24/05/1995
-            </Text>
-          </View>
+          <Text style={styles.sectionTitle}>{resumeDetails.skillsTITLE}</Text>
+          {resumeDetails.skills &&
+            resumeDetails.skills.map((skill, index) => {
+              return (
+                <Text key={index} style={styles.text}>
+                  - {skill}
+                </Text>
+              );
+            })}
 
-          <View style={styles.contactItem}>
-            <Text style={styles.iconText}>
-              <Text style={styles.icon}>🚗</Text>
-              Driving licence: B
-            </Text>
-          </View>
+          <Text style={styles.sectionTitle}>
+            {resumeDetails.languagesTITLE}
+          </Text>
 
-          <Text style={styles.sectionTitle}>Skills</Text>
-          <Text style={styles.text}>- Skill 1</Text>
-          <Text style={styles.text}>- Skill 2</Text>
-          <Text style={styles.text}>- Skill 3</Text>
-          <Text style={styles.text}>- Skill 4</Text>
-          <Text style={styles.text}>- Skill 5</Text>
+          {resumeDetails.languages &&
+            resumeDetails.languages.map((language, index) => {
+              return (
+                <Text key={index} style={styles.text}>
+                  - {language}
+                </Text>
+              );
+            })}
 
-          <Text style={styles.sectionTitle}>Languages</Text>
-          <Text style={styles.text}>- Language 1</Text>
-          <Text style={styles.text}>- Language 2</Text>
-
-          <Text style={styles.sectionTitle}>Hobbies</Text>
-          <Text style={styles.text}>- Hobby 1</Text>
-          <Text style={styles.text}>- Hobby 2</Text>
-          <Text style={styles.text}>- Hobby 3</Text>
-          <Text style={styles.text}>- Hobby 4</Text>
+          <Text style={styles.sectionTitle}>
+            {resumeDetails.socialLinksTITLE}
+          </Text>
+          {resumeDetails.socialLinks &&
+            resumeDetails.socialLinks.map((link, index) => {
+              return (
+                <Link key={index} style={styles.contact} src={link}>
+                  {link}{" "}
+                </Link>
+              );
+            })}
         </View>
 
-        {/* Right Column */}
         <View style={styles.rightColumn}>
-          <Text style={styles.sectionTitle}>About Me</Text>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+          <Text style={styles.sectionTitle}>
+            {resumeDetails.professionalSummaryTITLE}
+          </Text>
+          <Text style={styles.text}>{resumeDetails.professionalSummary}</Text>
+
+          <Text style={styles.employmentSectionTitle}>
+            {resumeDetails.emplymentTITLE}
           </Text>
 
-          <Text style={styles.sectionTitle}>Professional Experience</Text>
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: "bold" }}>2020 - 2022 </Text>
-            Position Held - Company
-          </Text>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </Text>
+          {resumeDetails.employmentHistory?.map((eHistory, index) => (
+            <View key={index} style={{ marginVertical: 5 }}>
+              <Text style={{ fontWeight: "bold" }}>
+                {eHistory.jobHistoryStartAndEndYear}
+              </Text>{" "}
+              <Text>
+                {eHistory.jobHistoryJobTitle} - {eHistory.jobHistoryEmployer},{" "}
+                {eHistory.jobHistoryCity}
+              </Text>
+              <Text style={styles.jobDescrText}>
+                {eHistory.jobHistoryDescription}
+              </Text>
+            </View>
+          ))}
 
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: "bold" }}>2015 - 2020 </Text>
-            Position Held - Company
-          </Text>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </Text>
+          {resumeDetails.educationTITLE && (
+            //! use flex and gap
 
-          {/* Add more experiences similarly */}
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                {resumeDetails.educationTITLE}
+              </Text>
+              {resumeDetails.education?.map((education, index) => (
+                <View key={index} style={styles.emplymentView}>
+                  <Text style={styles.text}>
+                    {education.educationDegree} at {education.educationSchoold}
+                    <Text>
+                      {", "}
+                      {education.educationCity}
+                    </Text>
+                  </Text>
 
-          <Text style={styles.sectionTitle}>Educational Background</Text>
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: "bold" }}>2005 - 2008 </Text>
-            Degree - Institution
-          </Text>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </Text>
-
-          <Text style={styles.text}>
-            <Text style={{ fontWeight: "bold" }}>2002 - 2005 </Text>
-            Degree - Institution
-          </Text>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </Text>
-
-          {/* Add more educational qualifications similarly */}
+                  <Text style={[styles.text]}>
+                    {education.educationStartAndEndYear}
+                  </Text>
+                  <View style={styles.list}>
+                    <Text style={styles.listItem}>
+                      {education.educationDescription}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       </View>
     </Page>
