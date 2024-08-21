@@ -1,0 +1,1 @@
+in template1 if TITLE is deleted it is still shown at the templete, but not on the download

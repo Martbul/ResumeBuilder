@@ -26,6 +26,8 @@ import {
 } from "@/app/utils/svg";
 import PDFtemplate5 from "@/app/pdfTemplates/PDFtemplate5";
 import PDFtemplate4 from "@/app/pdfTemplates/PDFtemplate4";
+import PDFtemplate6 from "@/app/pdfTemplates/PDFtemplate6";
+import PDFtemplate7 from "@/app/pdfTemplates/PDFtemplate7";
 
 interface CreateResumeFormProps {
   params: {
@@ -96,6 +98,30 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
       }));
     } else if (templateId === "3") {
     } else if (templateId === "4") {
+       setForRender((prevState) => ({
+         ...prevState,
+         firstNameRender: true,
+         lastNameRender: true,
+         ageRender: true,
+         photoRender: true,
+         emailRender: true,
+         phoneRender: true,
+         cityRender: true,
+         addressRender: true,
+         dateOfBirthRender: true,
+         professionalSummaryRender: true,
+         professionalSummaryTITLERender: true,
+         emplymentTITLERender: true,
+         socialLinksTITLERender: true,
+         skillsTITLERender: true,
+         languagesTITLERender: true,
+         educationTITLERender: true,
+         employmentHistoryRender: true,
+         educationRender: true,
+         socialLinksRender: true,
+         skillsRender: true,
+         languagesRender: true,
+       }));
     } else if (templateId === "5") {
       setForRender((prevState) => ({
         ...prevState,
@@ -122,6 +148,56 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
         languagesRender: true,
       }));
     } else if (templateId === "6") {
+       setForRender((prevState) => ({
+         ...prevState,
+         firstNameRender: true,
+         lastNameRender: true,
+         ageRender: true,
+         photoRender: true,
+         emailRender: true,
+         phoneRender: true,
+         cityRender: true,
+         addressRender: true,
+         dateOfBirthRender: true,
+         professionalSummaryRender: true,
+         professionalSummaryTITLERender: true,
+         emplymentTITLERender: true,
+         socialLinksTITLERender: true,
+         skillsTITLERender: true,
+         languagesTITLERender: true,
+         educationTITLERender: true,
+         employmentHistoryRender: true,
+         educationRender: true,
+         socialLinksRender: true,
+         skillsRender: true,
+         languagesRender: true,
+       }));
+    }
+    else if (templateId === "7") {
+       setForRender((prevState) => ({
+         ...prevState,
+         firstNameRender: true,
+         lastNameRender: true,
+         ageRender: false,
+         photoRender: true,
+         emailRender: true,
+         phoneRender: true,
+         cityRender: false,
+         addressRender: false,
+         dateOfBirthRender: true,
+         professionalSummaryRender: true,
+         professionalSummaryTITLERender: true,
+         emplymentTITLERender: true,
+         socialLinksTITLERender: true,
+         skillsTITLERender: true,
+         languagesTITLERender: true,
+         educationTITLERender: true,
+         employmentHistoryRender: true,
+         educationRender: true,
+         socialLinksRender: true,
+         skillsRender: true,
+         languagesRender: false,
+       }));
     }
   }, [templateId]);
   const [resumeDetails, setResumeDetails] = useState<ResumeDeatilsFormData>({
@@ -129,8 +205,8 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
     lastName: "Doe",
     age: 20,
     photo: null,
-    email: "johnDoe@gmail.com",
-    phone: "+359 888571991",
+    email: "",
+    phone: "",
     city: "",
     address: "",
     dateOfBirth: "",
@@ -148,7 +224,6 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
     languages: [],
     imagePreviewUrl:"",
   });
-// const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
   const [forRender, setForRender] = useState({
     firstNameRender: false,
@@ -179,15 +254,12 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
       setResumeDetails((prevDetails) => {
         if (id === "picture" && files && files.length > 0) {
           const file = files[0];
-
-          // Create a URL for the image preview
           const imageUrl = URL.createObjectURL(file);
 
-          // Update the state with the file and the preview URL
           return {
             ...prevDetails,
-            photo: file, // Store the file
-            imagePreviewUrl: imageUrl, // Store the preview URL
+            photo: file, 
+            imagePreviewUrl: imageUrl,
           };
         }
         if (id === "socialLinks" || id === "skills" || id === "languages") {
@@ -268,6 +340,10 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
         return <PDFtemplate4 resumeDetails={resumeDetails} />;
       case "5":
         return <PDFtemplate5 resumeDetails={resumeDetails} />;
+      case "6":
+        return <PDFtemplate6 resumeDetails={resumeDetails} />;
+      case "7":
+        return <PDFtemplate7 resumeDetails={resumeDetails} />;
     }
   };
 
@@ -809,6 +885,12 @@ const renderTemplate = (
     return <PDFtemplate4 resumeDetails={resumeDetails} />;
   } else if (templateId == "5") {
     return <PDFtemplate5 resumeDetails={resumeDetails} />;
+  }
+   else if (templateId == "6") {
+    return <PDFtemplate6 resumeDetails={resumeDetails} />;
+  }
+  else if (templateId == "7") {
+    return <PDFtemplate7 resumeDetails={resumeDetails} />;
   }
 };
 export default createResumeForm;

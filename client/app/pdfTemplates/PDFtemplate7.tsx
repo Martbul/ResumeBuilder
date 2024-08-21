@@ -8,29 +8,36 @@ import {
   Image,
   Link,
 } from "@react-pdf/renderer";
+import { ResumeDeatilsFormData } from "../utils/types";
 
-// Define the styles to match the provided CV layout
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
     fontFamily: "Helvetica",
     fontSize: 10,
     lineHeight: 1.5,
     color: "#333",
   },
   header: {
+    margin: 30,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomWidth: 2,
     borderBottomColor: "#FFDD44",
+
     paddingBottom: 10,
     marginBottom: 15,
   },
-  contactInfo: {
+  contactInfo1: {
+    // width:"full",
+    padding: 4,
+    backgroundColor: "#FFDD44",
+  },
+  contactInfo2: {
+    fontSize: 10,
+    marginHorizontal: 30,
     flexDirection: "row",
     justifyContent: "space-between",
-    fontSize: 9,
   },
   name: {
     fontSize: 24,
@@ -40,6 +47,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 10,
     marginBottom: 10,
+  },
+  summary: {
+    fontSize: 10,
+    marginBottom: 10,
+    maxWidth: "80%",
   },
   profileImage: {
     width: 60,
@@ -80,6 +92,8 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   sectionColumn: {
+    padding: 30,
+
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -91,130 +105,131 @@ const styles = StyleSheet.create({
   rightColumn: {
     width: "45%",
   },
+  photo: {
+    width: "92em",
+    height: "92em",
+    objectFit: "cover",
+    borderRadius: 50,
+    marginBottom: 10,
+  },
 });
 
-const PDFtemplate7: React.FC<{ resumeDetails: any }> = ({ resumeDetails }) => {
+const PDFtemplate7: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
+  resumeDetails,
+}) => {
   return (
     <Document>
       <Page style={styles.page}>
-        {/* Header */}
+
+
+        <View style={styles.contactInfo1}>
+          <View style={styles.contactInfo2}>
+            <Text>{resumeDetails.phone}</Text>
+            <Text>{resumeDetails.email}</Text>
+          </View>
+        </View>
+
+        
         <View style={styles.header}>
           <View>
-            <Text style={styles.name}>Melanie Robinson</Text>
-            <Text style={styles.title}>
-              Qualified Customer Service Representative
+            <Text style={styles.name}>
+              {resumeDetails.firstName} {resumeDetails.lastName}
             </Text>
+            {resumeDetails.professionalSummaryTITLE && (
+              <Text style={styles.summary}>
+                {resumeDetails.professionalSummary}
+              </Text>
+            )}
           </View>
           <Image
-            style={styles.profileImage}
-            src="https://path-to-your-profile-image.jpg"
+            style={styles.photo}
+            src={
+              resumeDetails.imagePreviewUrl ||
+              "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
+            }
           />
         </View>
 
-        {/* Contact Info */}
-        <View style={styles.contactInfo}>
-          <Text>+1 (970) 333-383-999</Text>
-          <Text>melanie.robinson@mail.com</Text>
-          <Text>linkedin.com/mrobinson</Text>
-        </View>
-
-        {/* Sections */}
         <View style={styles.sectionColumn}>
-          {/* Left Column */}
           <View style={styles.leftColumn}>
-            {/* Skills */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Skills</Text>
-              <View style={styles.bulletList}>
-                <Text style={styles.bulletPoint}>
-                  International sales support
+            {resumeDetails.skillsTITLE && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  {resumeDetails.skillsTITLE}
                 </Text>
-                <Text style={styles.bulletPoint}>
-                  Strategic sales knowledge
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Exceptional communication skills
-                </Text>
-                <Text style={styles.bulletPoint}>Stock records management</Text>
-                <Text style={styles.bulletPoint}>
-                  Problem-solving and execution
-                </Text>
+                <View style={styles.bulletList}>
+                  {resumeDetails.skills?.map((skill, index) => {
+                    return (
+                      <Text key={index} style={styles.bulletPoint}>
+                        {skill}{" "}
+                      </Text>
+                    );
+                  })}
+                </View>
               </View>
-            </View>
+            )}
 
-            {/* Education */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Education</Text>
-              <Text>Bachelor of Arts: Marketing Oregon University – 2018</Text>
-              <Text>Bachelor of Arts: Marketing Oregon University – 2014</Text>
-              <Text>Bachelor of Arts: Marketing Oregon University – 2011</Text>
-            </View>
+            {resumeDetails.educationTITLE && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  {resumeDetails.educationTITLE}
+                </Text>
+                <View style={styles.bulletList}>
+                  {resumeDetails.education?.map((education, index) => {
+                    return (
+                      <Text key={index}>
+                        {education.educationDegree}:{" "}
+                        {education.educationSchoold} |{" "}
+                        {education.educationStartAndEndYear}
+                      </Text>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
 
-            {/* Reference */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Reference</Text>
-              <Text>Steve Halloway - Business Consultant at SX Solutions</Text>
-              <Text>shallaway@sxsolutions.com</Text>
-              <Text>305-300-7891</Text>
-            </View>
+            {resumeDetails.socialLinksTITLE && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  {resumeDetails.socialLinksTITLE}
+                </Text>
+                <View style={styles.bulletList}>
+                  {resumeDetails.socialLinks?.map((link, index) => (
+                    <Link
+                      key={index}
+                      style={[{ color: "#333", textDecoration: "none" }]}
+                      src={link}
+                    >
+                      {link}
+                    </Link>
+                  ))}
+                </View>
+              </View>
+            )}
           </View>
 
-          {/* Right Column */}
           <View style={styles.rightColumn}>
-            {/* Work History */}
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Work History</Text>
-              <View style={styles.bulletList}>
-                <Text style={styles.bulletPoint}>
-                  Customer Service Representative – BATS Global Markets Inc.,
-                  Chicago – 04/2017 to 09/2018
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Contact customers to follow up on purchases.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Suggested new merchandise based on customers’ preferences and
-                  needs.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Promoted services as a superior provider within the
-                  competitive set.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Increased new customer acquisition by 12%.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Managed clients with up-to-date knowledge of product and
-                  services.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Answered phone inquiries regarding services and managed
-                  replacement of damaged or missing products.
-                </Text>
-              </View>
-
-              <View style={styles.bulletList}>
-                <Text style={styles.bulletPoint}>
-                  Customer Service Representative – Foodspotting Inc., Chicago –
-                  04/2015 to 09/2016
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Assisted customers with food selection.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Inquiries and customer support requests were managed with
-                  professionalism and tact.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Processed returns and exchanges.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Contacted customers to follow up on purchases.
-                </Text>
-                <Text style={styles.bulletPoint}>
-                  Provided timely resolution for replacement of damaged or
-                  missing products.
-                </Text>
+              <Text style={styles.sectionTitle}>
+                {resumeDetails.emplymentTITLE}
+              </Text>
+              <View
+                style={{ display: "flex", flexDirection: "column", gap: 11 }}
+              >
+                {resumeDetails.employmentHistory?.map((eHistory, index) => {
+                  return (
+                    <View key={index} style={styles.bulletList}>
+                      <Text style={styles.bulletPoint}>
+                        {eHistory.jobHistoryJobTitle} –{" "}
+                        {eHistory.jobHistoryEmployer}, {eHistory.jobHistoryCity}{" "}
+                        – {eHistory.jobHistoryStartAndEndYear}
+                      </Text>
+                      <Text style={styles.bulletPoint}>
+                        {eHistory.jobHistoryDescription}
+                      </Text>
+                    </View>
+                  );
+                })}
               </View>
             </View>
           </View>

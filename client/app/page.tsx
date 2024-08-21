@@ -1,11 +1,18 @@
-
+"use client"
+import { motion } from "framer-motion";
 import Image from "next/image";
-import images from "../constants/images"
+import images from "../constants/images";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Navaigation from "@/components/navigation/Navigation";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Laila, Lora } from "next/font/google";
+
 const laila = Laila({
   weight: "700",
   subsets: ["latin"],
@@ -14,11 +21,12 @@ const lora = Lora({
   weight: "400",
   subsets: ["latin"],
 });
+
 export default function Home() {
   return (
     <main className="">
       <Navaigation />
-      <section className="flex flex-col lg:h-screen  items-center bg-emerald-200  px-4 pt-2">
+      <section className="flex flex-col lg:h-screen items-center bg-emerald-200 px-4 pt-2">
         <div
           className={`text-3xl sm:text-4xl lg:text-5xl text-center mt-4 sm:mt-10 lg:mt-20 my-2 ${laila.className}`}
         >
@@ -34,8 +42,8 @@ export default function Home() {
         </div>
         <div className="mt-auto w-full flex flex-col items-center">
           <div className="flex flex-col items-center my-6 lg:my-10 gap-4 lg:gap-6">
-            <Button className="px-4 py-3  text-base lg:text-lg w-full w-full lg:p-7">
-              <Link href="allTemplates" className=" w-full text-center">
+            <Button className="px-4 py-3 text-base lg:text-lg w-full lg:p-7">
+              <Link href="allTemplates" className="w-full text-center">
                 Create My Resume
               </Link>
             </Button>
@@ -43,9 +51,18 @@ export default function Home() {
               22,165 resumes created today
             </p>
           </div>
-          <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-2xl overflow-hidden">
-            <Image src={images.mainCV} alt="" className="w-full h-auto" />
-          </div>
+          <motion.div
+            className="relative w-full max-w-sm sm:max-w-md lg:max-w-2xl overflow-hidden"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            <Image
+              src={images.mainCV}
+              alt="Resume example"
+              className="w-full h-auto"
+            />
+          </motion.div>
         </div>
       </section>
 
@@ -88,27 +105,35 @@ export default function Home() {
           <Image src={images.CV3Main} alt="3cv" className="" />
         </div>
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center lg:px-40 lg:p-40 lg:gap-40 p-8">
-          <div className="flex flex-col">
-            <h3 className="lg:text-sm text-xs lg:my-2">
-              Start building your career
-            </h3>
-            <h1
-              className={`lg:text-4xl lg:max-w-96 lg:min-w-96 text-xl lg:font-semibold ${laila.className}`}
-            >
-              Professional resumes for effective job interviews
-            </h1>
-            <p className={`lg:max-w-96 lg:min-w-80 my-4 ${lora.className}`}>
-              A great job application leads to a good interview. An amazing
-              resume is what makes it all possible. Start off strong with the
-              hiring manager by creating a positive professional image. A job
-              interview can be much easier if they have a favorable view of your
-              resume and cover letter.
-            </p>
-            <div className="flex flex-row mt-4 max-w-48 lg:flex-row gap-6">
-              <Button>Get Started Now</Button>
-              <Button>Resume Examples</Button>
+          <motion.div
+            className="relative w-full max-w-sm sm:max-w-md lg:max-w-2xl overflow-hidden"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          >
+            <div className="flex flex-col">
+              <h3 className="lg:text-sm text-xs lg:my-2">
+                Start building your career
+              </h3>
+              <h1
+                className={`lg:text-4xl lg:max-w-96 lg:min-w-96 text-xl lg:font-semibold ${laila.className}`}
+              >
+                Professional resumes for effective job interviews
+              </h1>
+
+              <p className={`lg:max-w-96 lg:min-w-80 my-4 ${lora.className}`}>
+                A great job application leads to a good interview. An amazing
+                resume is what makes it all possible. Start off strong with the
+                hiring manager by creating a positive professional image. A job
+                interview can be much easier if they have a favorable view of
+                your resume and cover letter.
+              </p>
+              <div className="flex flex-row mt-4 max-w-48 lg:flex-row gap-6">
+                <Button>Get Started Now</Button>
+                <Button>Resume Examples</Button>
+              </div>
             </div>
-          </div>
+          </motion.div>
           <div className="flex hidden lg:block">
             <Image src={images.CV3Main} alt="3cv" className="lg:max-w-xl" />
           </div>

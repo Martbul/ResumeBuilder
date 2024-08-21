@@ -66,7 +66,7 @@ const allTemplates = () => {
             <div className="bg-neutral-200 w-full sm:w-auto p-2">
               <div className="max-w-xs mx-auto">
                 <Image
-                  src={images.template3}
+                  src={images.template4}
                   alt="t3"
                   className="w-full h-auto object-contain hover:opacity-80"
                 />
@@ -78,6 +78,28 @@ const allTemplates = () => {
               <div className="max-w-xs mx-auto">
                 <Image
                   src={images.template5}
+                  alt="t3"
+                  className="w-full h-auto object-contain hover:opacity-80"
+                />
+              </div>
+            </div>
+          </Link>
+          <Link href="createResume/6" className="lg:my-12">
+            <div className="bg-neutral-200 w-full sm:w-auto p-2">
+              <div className="max-w-xs mx-auto">
+                <Image
+                  src={images.template5}
+                  alt="t3"
+                  className="w-full h-auto object-contain hover:opacity-80"
+                />
+              </div>
+            </div>
+          </Link>
+          <Link href="createResume/7" className="lg:my-12">
+            <div className="bg-neutral-200 w-full sm:w-auto p-2">
+              <div className="max-w-xs mx-auto">
+                <Image
+                  src={images.template7}
                   alt="t3"
                   className="w-full h-auto object-contain hover:opacity-80"
                 />

@@ -181,6 +181,7 @@ const PDFtemplate1: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
             })}
           </View>
         )}
+        
         {resumeDetails.professionalSummaryTITLE && (
           <View style={styles.section}>
             <Text style={styles.subheader}>
