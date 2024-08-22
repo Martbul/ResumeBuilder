@@ -1,203 +1,183 @@
 import React from "react";
 import {
-  PDFViewer,
   Document,
   Page,
   Text,
   View,
   StyleSheet,
   Image,
+  Link,
 } from "@react-pdf/renderer";
 
 import type { ResumeDeatilsFormData } from "@/app/utils/types";
 
-
 const styles = StyleSheet.create({
   page: {
-    padding: 20,
-    backgroundColor: "#f9fafb", // Tailwind's bg-gray-100
-    fontFamily: "Helvetica", // Default font in PDF rendering
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    backgroundColor: "#ffffff",
+    fontFamily: "Helvetica",
   },
   container: {
     flexDirection: "row",
   },
   leftColumn: {
-    width: "70%",
-    paddingRight: 20,
+    width: "35%",
+    backgroundColor: "#2c3e50",
+    padding: 15,
+    color: "#ffffff",
   },
   rightColumn: {
-    width: "30%",
-    backgroundColor: "#e5e7eb", // Tailwind's bg-gray-200
+    width: "65%",
     padding: 15,
-    borderRadius: 5,
   },
-  header: {
-    fontSize: 28,
-    fontWeight: "bold", // Tailwind's font-bold
-    marginBottom: 10,
-    textAlign: "center",
+  profileImage: {
+    borderRadius: "50%",
+    width: 100,
+    height: 100,
+    marginBottom: 15,
   },
-  contact: {
-    fontSize: 12,
-    color: "#374151", // Tailwind's text-gray-700
-    marginBottom: 5,
-    textAlign: "center", // Tailwind's text-center
-  },
-  profilePicture: {
-    width: 80, // Smaller profile picture
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 10,
-    border: "2px solid #374151",
-  },
-  section: {
-    marginBottom: 20,
-    paddingBottom: 10,
-    borderBottom: "1px solid #e5e7eb", // Tailwind's border-gray-200
-  },
-  subheader: {
-    fontSize: 22,
-    fontWeight: "bold", // Tailwind's font-bold
-    borderBottom: "2px solid #374151", // Tailwind's border-gray-700
-    paddingBottom: 5,
-    marginBottom: 10,
-  },
-  text: {
-    fontSize: 12,
-    lineHeight: 1.5, // Tailwind's leading-relaxed
-  },
-  list: {
-    margin: 0,
-    padding: 0,
-    listStyleType: "none",
-  },
-  listItem: {
-    marginBottom: 5,
-    fontSize: 12,
-    lineHeight: 1.5, // Tailwind's leading-relaxed
-  },
-  bullet: {
-    marginRight: 5,
-    fontSize: 12,
+  name: {
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#374151", // Tailwind's text-gray-700
+    color: "#2c3e50",
+  },
+  title: {
+    fontSize: 14,
+    marginBottom: 20,
+    color: "#2c3e50",
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 12,
     fontWeight: "bold",
-    color: "#374151", // Tailwind's text-gray-700
-    marginBottom: 5,
+    marginBottom: 10,
+    color: "#2c3e50",
   },
-  highlighted: {
-    backgroundColor: "#e5e7eb", // Tailwind's bg-gray-200
-    padding: 5,
-    borderRadius: 5,
+  sectionContent: {
+    fontSize: 10,
+    marginBottom: 10,
+  },
+  contactItem: {
+    fontSize: 10,
+    marginBottom: 5,
+    color: "#ffffff",
+  },
+  listItem: {
+    fontSize: 10,
+    marginBottom: 5,
+    color: "#ffffff",
+  },
+  skillBarContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  skillBarLabel: {
+    fontSize: 10,
+    color: "#2c3e50",
+  },
+  skillBar: {
+    width: "60%",
+    height: 5,
+    backgroundColor: "#d1d5db",
+  },
+  skillLevel: {
+    height: 5,
+    backgroundColor: "#2c3e50",
   },
 });
 
-// Create a CV component with a two-column layout
-const PDFtemplate3: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = () => (
-  <Document>
-    <Page style={styles.page}>
-      <View style={styles.container}>
-        {/* Right Column (was left) */}
-        <View style={styles.rightColumn}>
-          <Image
-            style={styles.profilePicture}
-            src="https://via.placeholder.com/80" // Replace with your profile picture URL
-          />
-          <Text style={styles.header}>John Doe</Text>
-          <Text style={styles.contact}>Email: john.doe@example.com</Text>
-          <Text style={styles.contact}>Phone: (123) 456-7890</Text>
-          <Text style={styles.contact}>LinkedIn: linkedin.com/in/johndoe</Text>
-        </View>
+const PDFtemplate3: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
+  resumeDetails,
+}) => {
+  return (
+    <Document>
+      <Page style={styles.page}>
+        <View style={styles.container}>
 
-        {/* Left Column (was right) */}
-        <View style={styles.leftColumn}>
-          {/* Experience */}
-          <View style={styles.section}>
-            <Text style={styles.subheader}>Experience</Text>
-            <Text style={styles.text}>
-              <Text style={{ fontWeight: "bold" }}>Senior Developer</Text> -
-              Company A (Jan 2020 - Present)
+          <View style={styles.leftColumn}>
+            <Image
+              style={styles.profileImage}
+              src={resumeDetails.imagePreviewUrl || "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
+              }
+            />
+            <Text style={styles.contactItem}>{resumeDetails.phone}</Text>
+            <Text style={styles.contactItem}>{resumeDetails.email}</Text>
+            <Text style={styles.contactItem}>
+              {resumeDetails.address}, {resumeDetails.city}
             </Text>
-            <View style={styles.list}>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> Developed and maintained
-                web applications using React and Node.js.
-              </Text>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> Led a team of 5 developers
-                to deliver projects on time and within budget.
-              </Text>
-            </View>
 
-            <Text style={styles.text}>
-              <Text style={{ fontWeight: "bold" }}>Software Engineer</Text> -
-              Company B (Jun 2017 - Dec 2019)
+            <Text style={[styles.sectionTitle, { marginTop: 20 }]}>
+              {resumeDetails.languagesTITLE}
             </Text>
-            <View style={styles.list}>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> Worked on backend services
-                and APIs using Python and Django.
-              </Text>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> Improved application
-                performance by 30% through code optimization.
-              </Text>
-            </View>
+            {resumeDetails.languages?.map((language, index) =>{
+              return (
+
+
+            <Text key={index} style={styles.listItem}>• {language}</Text>
+              )
+            })}
+
+{resumeDetails.skillsTITLE && ( 
+  <>
+    <Text style={[styles.sectionTitle, { marginTop: 20 }]}>
+              {resumeDetails.skillsTITLE}
+            </Text>
+            {resumeDetails.skills?.map((skill, index) =>{
+              return (
+
+
+            <Text key={index} style={styles.listItem}>• {skill}</Text>
+              )
+            })}
+           
+  </>
+)}
           </View>
 
-          {/* Education */}
-          <View style={styles.section}>
-            <Text style={styles.subheader}>Education</Text>
-            <Text style={styles.text}>
-              <Text style={{ fontWeight: "bold" }}>B.Sc. Computer Science</Text>{" "}
-              - University X (2013 - 2017)
+          {/* Right Column */}
+          <View style={styles.rightColumn}>
+            <Text style={styles.name}>{resumeDetails.firstName} {resumeDetails.lastName}</Text>
+
+{resumeDetails.emplymentTITLE && (
+  <>
+   <Text style={styles.sectionTitle}>{resumeDetails.emplymentTITLE}</Text>
+   {resumeDetails.employmentHistory?.map((eHistory, index) =>{
+    return (
+       <Text key={index} style={styles.sectionContent}>
+              {eHistory.jobHistoryJobTitle} at {eHistory.jobHistoryEmployer}, {eHistory.jobHistoryCity} | {eHistory.jobHistoryStartAndEndYear}
+              {"\n"}
+             {eHistory.jobHistoryDescription}
             </Text>
-          </View>
+    )
+   })}
+          
+  </>
+)}
 
-          {/* Skills */}
-          <View style={styles.section}>
-            <Text style={styles.subheader}>Skills</Text>
-            <View style={styles.list}>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> JavaScript, React, Node.js
-              </Text>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> Python, Django
-              </Text>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> SQL, MongoDB
-              </Text>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text> Git, Docker
-              </Text>
-            </View>
-          </View>
-
-          {/* Projects */}
-          <View style={styles.section}>
-            <Text style={styles.subheader}>Projects</Text>
-            <View style={styles.list}>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text>{" "}
-                <Text style={{ fontWeight: "bold" }}>Project A</Text> - A web
-                application for managing tasks. Utilized React for frontend
-                development and Node.js for backend.
-              </Text>
-              <Text style={styles.listItem}>
-                <Text style={styles.bullet}>•</Text>{" "}
-                <Text style={{ fontWeight: "bold" }}>Project B</Text> - A
-                real-time chat application. Implemented with WebSocket for
-                real-time communication.
-              </Text>
-            </View>
+{resumeDetails.educationTITLE && ( 
+  
+  <>
+  <Text style={styles.sectionTitle}>{resumeDetails.educationTITLE}</Text>
+            {resumeDetails.education?.map((education,index) =>{
+              return (
+                <View key={index}>
+                
+                 <Text style={styles.sectionContent}>
+              {education.educationSchoold}, {education.educationDegree} ({education.educationStartAndEndYear})
+            </Text>
+                </View>
+              )
+            })}
+           
+  </>
+  )}
           </View>
         </View>
-      </View>
-    </Page>
-  </Document>
-);
+      </Page>
+    </Document>
+  );
+};
 
 export default PDFtemplate3;

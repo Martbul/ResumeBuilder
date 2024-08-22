@@ -5,233 +5,165 @@ import {
   Text,
   View,
   StyleSheet,
-  Image,
   Link,
+  Image,
 } from "@react-pdf/renderer";
+import { ResumeDeatilsFormData } from "../utils/types";
 
-// Styles definition to match the layout of the provided CV
 const styles = StyleSheet.create({
   page: {
-    paddingHorizontal: 40,
-    paddingVertical: 40,
+    padding: 20,
     fontFamily: "Helvetica",
-    fontSize: 10,
-    lineHeight: 1.6,
+    fontSize: 11,
+    color: "#333",
   },
   header: {
-    display: "flex",
+    backgroundColor: "#003366",
+    color: "#ffffff",
+    padding: 10,
+    textAlign: "center",
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#C5C5C5",
+    alignItems: "center",
+  },
+  headerImage: {
+    width: 50,
+    height: 50,
+    borderRadius: "50%",
+    marginRight: 10,
+  },
+  headerText: {
+    flexGrow: 1,
+    fontSize: 20,
+  },
+  contactInfo: {
+    marginTop: 10,
+    color: "#ffffff",
+  },
+  section: {
+    marginVertical: 10,
     paddingBottom: 10,
+    borderBottom: "1px solid #dddddd",
   },
-  leftColumn: {
-    width: "45%",
-    paddingRight: 15,
+  subheader: {
+    fontSize: 14,
+    marginBottom: 5,
+    fontWeight: "bold",
   },
-  rightColumn: {
-    width: "45%",
+  text: {
+    marginBottom: 5,
+  },
+  list: {
     paddingLeft: 15,
   },
-  profileImage: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    marginLeft: "auto",
-    borderWidth: 2,
-    borderColor: "#5555FF",
-  },
-  nameSection: {
-    marginBottom: 5,
-  },
-  fullName: {
-    fontSize: 20,
-    fontWeight: "bold",
-    textTransform: "uppercase",
-  },
-  position: {
-    fontSize: 12,
-    backgroundColor: "#A5A5FF",
-    color: "#fff",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    marginVertical: 10,
-    borderRadius: 2,
-    alignSelf: "flex-start",
-  },
-  infoItem: {
+  listItem: {
     marginBottom: 3,
-    fontSize: 10,
   },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: "#C5C5C5",
-    paddingBottom: 2,
-    textTransform: "uppercase",
+  leftColumn: {
+    width: "30%",
+    paddingRight: 10,
   },
-  sectionContent: {
-    marginBottom: 10,
+  rightColumn: {
+    width: "70%",
   },
-  experienceTitle: {
-    fontWeight: "bold",
-  },
-  skillsContainer: {
-    display: "flex",
+  twoColumn: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    marginBottom: 5,
+    justifyContent: "space-between",
   },
-  skillItem: {
-    display: "flex",
+  iconText: {
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 5,
   },
-  skillIcon: {
-    width: 15,
-    height: 15,
+  icon: {
+    width: 12,
+    height: 12,
     marginRight: 5,
   },
-  interestItem: {
-    marginBottom: 3,
+  boldText: {
+    fontWeight: "bold",
   },
 });
 
-const PDFtemplate6: React.FC<{ resumeDetails: any }> = ({ resumeDetails }) => {
-  return (
-    <Document>
-      <Page style={styles.page}>
-        {/* Header Section */}
-        <View style={styles.header}>
-          <View style={styles.leftColumn}>
-            <View style={styles.nameSection}>
-              <Text style={styles.fullName}>Nom Prénom</Text>
-              <Text style={styles.position}>Poste visé</Text>
-            </View>
-            <Text style={styles.infoItem}>Âge: 23 ans</Text>
-            <Text style={styles.infoItem}>
-              E-mail: hello@reallygreatsite.com
-            </Text>
-            <Text style={styles.infoItem}>Mobile: +0 212 123 24 25</Text>
-            <Text style={styles.infoItem}>Adresse: 123 Anywhere, France</Text>
-            <Text style={styles.infoItem}>Langue: Anglais, Espagnol</Text>
-            <Text style={styles.infoItem}>Permis: B + Véhicule</Text>
-          </View>
-          <View style={styles.rightColumn}>
-            <Image
-              style={styles.profileImage}
-              src="https://path-to-your-image.jpg"
+const ResumeTemplate6:React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({ resumeDetails }) => (
+  <Document>
+    <Page style={styles.page}>
+      {/* Header */}
+      <View style={styles.header}>
+         <Image
+              style={styles.headerImage}
+              src={resumeDetails.imagePreviewUrl || "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
+              }
             />
-          </View>
+        <View style={styles.headerText}>
+          <Text>{resumeDetails.firstName} {resumeDetails.lastName}</Text>
         </View>
+        <View style={styles.contactInfo}>
+          <Text>{resumeDetails.phone}</Text>
+          <Text>{resumeDetails.email}</Text>
+        </View>
+      </View>
 
-        {/* Left Column: Competencies and Interests */}
+      {/* Profile Summary */}
+      <View style={styles.section}>
+        <Text style={styles.subheader}>Profile Summary</Text>
+        <Text>{resumeDetails.professionalSummary}</Text>
+      </View>
+
+      {/* Social Links */}
+      <View style={styles.section}>
+        <Text style={styles.subheader}>Social Links</Text>
+        <View style={styles.list}>
+          {resumeDetails.socialLinks?.map((link, index) => (
+            <Link key={index} style={styles.text} src={link}>
+              {link}
+            </Link>
+          ))}
+        </View>
+      </View>
+
+      {/* Skills and Education */}
+      <View style={styles.twoColumn}>
         <View style={styles.leftColumn}>
-          <View style={styles.sectionContent}>
-            <Text style={styles.sectionTitle}>COMPÉTENCES</Text>
-            <View style={styles.skillsContainer}>
-              <View style={styles.skillItem}>
-                <Image
-                  style={styles.skillIcon}
-                  src="https://path-to-your-icon.png"
-                />
-                <Text>Logiciel 1</Text>
-              </View>
-              <View style={styles.skillItem}>
-                <Image
-                  style={styles.skillIcon}
-                  src="https://path-to-your-icon.png"
-                />
-                <Text>Logiciel 2</Text>
-              </View>
-              <View style={styles.skillItem}>
-                <Image
-                  style={styles.skillIcon}
-                  src="https://path-to-your-icon.png"
-                />
-                <Text>Logiciel 3</Text>
-              </View>
-              <View style={styles.skillItem}>
-                <Image
-                  style={styles.skillIcon}
-                  src="https://path-to-your-icon.png"
-                />
-                <Text>Logiciel 4</Text>
-              </View>
+          <View style={styles.section}>
+            <Text style={styles.subheader}>Skills</Text>
+            <View style={styles.list}>
+              {resumeDetails.skills?.map((skill, index) => (
+                <Text key={index} style={styles.listItem}>
+                  {skill}
+                </Text>
+              ))}
             </View>
           </View>
 
-          <View style={styles.sectionContent}>
-            <Text style={styles.sectionTitle}>CENTRES D'INTÉRÊT</Text>
-            <Text style={styles.interestItem}>Voyage</Text>
-            <Text style={styles.interestItem}>Sport</Text>
-            <Text style={styles.interestItem}>Musique</Text>
+          <View style={styles.section}>
+            <Text style={styles.subheader}>Education</Text>
+            {resumeDetails.education?.map((edu, index) => (
+              <View key={index} style={styles.text}>
+                <Text style={styles.boldText}>{edu.educationDegree}</Text>
+                <Text>{edu.educationSchoold}</Text>
+                <Text>{edu.educationStartAndEndYear}</Text>
+              </View>
+            ))}
           </View>
         </View>
 
-        {/* Right Column: Education and Experiences */}
+        {/* Experience */}
         <View style={styles.rightColumn}>
-          <View style={styles.sectionContent}>
-            <Text style={styles.sectionTitle}>ÉDUCATION</Text>
-            <Text style={styles.experienceTitle}>L'intitulé du diplôme</Text>
-            <Text>Nom de l'établissement, Ville</Text>
-            <Text>2020 - 2022</Text>
-          </View>
-          <View style={styles.sectionContent}>
-            <Text style={styles.experienceTitle}>L'intitulé du diplôme</Text>
-            <Text>Nom de l'établissement, Ville</Text>
-            <Text>2017 - 2020</Text>
-          </View>
-
-          <View style={styles.sectionContent}>
-            <Text style={styles.sectionTitle}>
-              EXPÉRIENCES PROFESSIONNELLES
-            </Text>
-            <View style={styles.sectionContent}>
-              <Text style={styles.experienceTitle}>Nom de l'entreprise</Text>
-              <Text>Poste occupé</Text>
-              <Text>Ville</Text>
-              <Text>Juillet 2022 - actuel</Text>
-              <Text>
-                Mettez ici une description de vos expériences. Utilisez des noms
-                pour décrire les tâches. Par exemple: création, développement,
-                etc.
-              </Text>
-            </View>
-
-            <View style={styles.sectionContent}>
-              <Text style={styles.experienceTitle}>Nom de l'entreprise</Text>
-              <Text>Poste occupé</Text>
-              <Text>Ville</Text>
-              <Text>Juin 2022 - Septembre 2022</Text>
-              <Text>
-                Mettez ici une description de vos expériences. Utilisez des noms
-                pour décrire les tâches. Par exemple: création, développement,
-                etc.
-              </Text>
-            </View>
-
-            <View style={styles.sectionContent}>
-              <Text style={styles.experienceTitle}>Nom de l'entreprise</Text>
-              <Text>Poste occupé</Text>
-              <Text>Ville</Text>
-              <Text>Juillet 2020 - Septembre 2020</Text>
-              <Text>
-                Mettez ici une description de vos expériences. Utilisez des noms
-                pour décrire les tâches. Par exemple: création, développement,
-                etc.
-              </Text>
-            </View>
+          <View style={styles.section}>
+            <Text style={styles.subheader}>{resumeDetails.emplymentTITLE}</Text>
+            {resumeDetails.employmentHistory?.map((exp, index) => (
+              <View key={index} style={styles.text}>
+                <Text style={styles.boldText}>{exp.jobHistoryJobTitle}</Text>
+                <Text>{exp.jobHistoryEmployer}</Text>
+                <Text>{exp.jobHistoryStartAndEndYear}</Text>
+                <Text>{exp.jobHistoryDescription}</Text>
+              </View>
+            ))}
           </View>
         </View>
-      </Page>
-    </Document>
-  );
-};
+      </View>
+    </Page>
+  </Document>
+);
 
-export default PDFtemplate6;
+export default ResumeTemplate6;

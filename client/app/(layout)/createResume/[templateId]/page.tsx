@@ -97,6 +97,31 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
         languagesRender: false,
       }));
     } else if (templateId === "3") {
+
+ setForRender((prevState) => ({
+         ...prevState,
+         firstNameRender: true,
+         lastNameRender: true,
+         ageRender: true,
+         photoRender: true,
+         emailRender: true,
+         phoneRender: true,
+         cityRender: true,
+         addressRender: true,
+         dateOfBirthRender: true,
+         professionalSummaryRender: true,
+         professionalSummaryTITLERender: true,
+         emplymentTITLERender: true,
+         socialLinksTITLERender: true,
+         skillsTITLERender: true,
+         languagesTITLERender: true,
+         educationTITLERender: true,
+         employmentHistoryRender: true,
+         educationRender: true,
+         socialLinksRender: true,
+         skillsRender: true,
+         languagesRender: true,
+       }));
     } else if (templateId === "4") {
        setForRender((prevState) => ({
          ...prevState,
@@ -497,15 +522,6 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
                   <Label htmlFor="picture">Picture</Label>
                   <Input id="picture" type="file" onChange={onChange} />
 
-                  {resumeDetails.imagePreviewUrl && (
-                    <div className="mt-4">
-                      <img
-                        src={resumeDetails.imagePreviewUrl}
-                        alt="Selected Preview"
-                        className="h-32 w-32 object-cover rounded-full"
-                      />
-                    </div>
-                  )}
                 </div>
               </div>
             )}
