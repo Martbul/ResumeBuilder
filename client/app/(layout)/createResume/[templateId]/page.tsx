@@ -2,7 +2,7 @@
 
 import PDFtemplate1 from "@/app/pdfTemplates/PDFtemplate1";
 import PDFtemplate2 from "@/app/pdfTemplates/PDFtemplate2";
-import PDFtemplate3 from "@/app/pdfTemplates/PDFtemplate3";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { pdf } from "@react-pdf/renderer";
@@ -24,10 +24,12 @@ import {
   SkillsStarIcon,
   LanguageIcon,
 } from "@/app/utils/svg";
-import PDFtemplate5 from "@/app/pdfTemplates/PDFtemplate5";
 import PDFtemplate4 from "@/app/pdfTemplates/PDFtemplate4";
+import PDFtemplate5 from "@/app/pdfTemplates/PDFtemplate5";
 import PDFtemplate6 from "@/app/pdfTemplates/PDFtemplate6";
-import PDFtemplate7 from "@/app/pdfTemplates/PDFtemplate7";
+import PDFtemplate3 from "@/app/pdfTemplates/PDFtemplate3";
+
+
 
 interface CreateResumeFormProps {
   params: {
@@ -156,8 +158,8 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
         photoRender: true,
         emailRender: true,
         phoneRender: true,
-        cityRender: true,
-        addressRender: true,
+        cityRender: false,
+        addressRender: false,
         dateOfBirthRender: true,
         professionalSummaryRender: true,
         professionalSummaryTITLERender: true,
@@ -198,32 +200,7 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
          languagesRender: true,
        }));
     }
-    else if (templateId === "7") {
-       setForRender((prevState) => ({
-         ...prevState,
-         firstNameRender: true,
-         lastNameRender: true,
-         ageRender: false,
-         photoRender: true,
-         emailRender: true,
-         phoneRender: true,
-         cityRender: false,
-         addressRender: false,
-         dateOfBirthRender: true,
-         professionalSummaryRender: true,
-         professionalSummaryTITLERender: true,
-         emplymentTITLERender: true,
-         socialLinksTITLERender: true,
-         skillsTITLERender: true,
-         languagesTITLERender: true,
-         educationTITLERender: true,
-         employmentHistoryRender: true,
-         educationRender: true,
-         socialLinksRender: true,
-         skillsRender: true,
-         languagesRender: false,
-       }));
-    }
+   
   }, [templateId]);
   const [resumeDetails, setResumeDetails] = useState<ResumeDeatilsFormData>({
     firstName: "John",
@@ -367,8 +344,6 @@ const createResumeForm: React.FC<CreateResumeFormProps> = ({ params }) => {
         return <PDFtemplate5 resumeDetails={resumeDetails} />;
       case "6":
         return <PDFtemplate6 resumeDetails={resumeDetails} />;
-      case "7":
-        return <PDFtemplate7 resumeDetails={resumeDetails} />;
     }
   };
 
@@ -907,8 +882,6 @@ const renderTemplate = (
    else if (templateId == "6") {
     return <PDFtemplate6 resumeDetails={resumeDetails} />;
   }
-  else if (templateId == "7") {
-    return <PDFtemplate7 resumeDetails={resumeDetails} />;
-  }
+ 
 };
 export default createResumeForm;

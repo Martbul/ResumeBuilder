@@ -26,7 +26,7 @@ const allTemplates = () => {
           </p>
         </div>
 
-        <div className="flex justify-evenly lg:mx-72 lg:my-8 mb-12 border-b border-gray-300">
+        {/* <div className="flex justify-evenly lg:mx-72 lg:my-8 mb-12 border-b border-gray-300">
           <Button className="bg-transparent lg:text-xl lg:font-bold text-neutral-500 hover:text-black hover:bg-transparent">
             <Link href="">All templates</Link>
           </Button>
@@ -39,10 +39,10 @@ const allTemplates = () => {
           <Button className="bg-transparent lg:text-xl lg:font-bold text-neutral-500 hover:text-black hover:bg-transparent">
             <Link href="">Modern</Link>
           </Button>
-        </div>
+        </div> */}
 
         <div className="flex flex-row flex-wrap lg:mx-64 justify-evenly">
-          {[1, 2, 3, 4, 5, 6, 7].map((id, index) => (
+          {[1, 2, 3, 4, 5, 6].map((id, index) => (
             <motion.div
               key={id}
               className="lg:my-12"

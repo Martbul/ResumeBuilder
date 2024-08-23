@@ -5,90 +5,69 @@ import {
   Text,
   View,
   StyleSheet,
+  Link,
   Image,
-  Link
 } from "@react-pdf/renderer";
-
-import type { ResumeDeatilsFormData } from "@/app/utils/types";
+import { ResumeDeatilsFormData } from "../utils/types";
 
 const styles = StyleSheet.create({
   page: {
     padding: 20,
-    fontSize: 12,
     fontFamily: "Helvetica",
+    fontSize: 11,
     color: "#333",
   },
-  contact: {
-    fontSize: 11,
-    color: "#000000",
-    marginBottom: 5,
-    textAlign: "center",
-  },
   header: {
+    backgroundColor: "#003366",
+    color: "#ffffff",
+    padding: 10,
+    textAlign: "center",
     flexDirection: "row",
-    marginBottom: 20,
+    alignItems: "center",
   },
-  leftColumn: {
-    width: "35%",
-    paddingRight: 10,
-    borderRight: "1 solid #e0e0e0",
+  headerImage: {
+    width: 50,
+    height: 50,
+    borderRadius: "50%",
+    marginRight: 10,
   },
-  rightColumn: {
-    width: "65%",
-    paddingLeft: 10,
-  },
-  // photo: {
-  //   width: 100,
-  //   height: 100,
-  //   borderRadius: 50,
-  //   marginBottom: 10,
-  // },
-
-photo :{
-  width: "84em",
-  height: "84em",
-  objectFit: "cover",
-  borderRadius: 50, 
-  marginBottom: 10,
-},
-
-  name: {
+  headerText: {
+    flexGrow: 1,
     fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 5,
   },
-  jobTitle: {
+  contactInfo: {
+    marginTop: 10,
+    color: "#ffffff",
+  },
+  section: {
+    marginVertical: 10,
+    paddingBottom: 10,
+    borderBottom: "1px solid #dddddd",
+  },
+  subheader: {
     fontSize: 14,
-    marginBottom: 15,
-  },
-  contactItem: {
     marginBottom: 5,
-  },
-  sectionTitle: {
-    fontSize: 14,
     fontWeight: "bold",
-    marginBottom: 10,
-    marginTop: 20,
-    borderBottom: "1 solid #e0e0e0",
-    paddingBottom: 5,
-  },
-  employmentSectionTitle: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginBottom: 5,
-    marginTop: 20,
-    borderBottom: "1 solid #e0e0e0",
-    paddingBottom: 5,
   },
   text: {
     marginBottom: 5,
-    lineHeight: 1.5,
   },
-  jobDescrText: {
-    lineHeight: 1,
+  list: {
+    paddingLeft: 15,
   },
   listItem: {
     marginBottom: 3,
+  },
+  leftColumn: {
+    width: "30%",
+    paddingRight: 10,
+  },
+  rightColumn: {
+    width: "70%",
+  },
+  twoColumn: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   iconText: {
     flexDirection: "row",
@@ -96,166 +75,107 @@ photo :{
     marginBottom: 5,
   },
   icon: {
+    width: 12,
+    height: 12,
     marginRight: 5,
   },
-  list: {
-    margin: 0,
-    padding: 0,
-    listStyleType: "none",
-  },
-  emplymentView: {
-    marginBottom: 10,
-  },
-  subheader: {
-    fontSize: 20,
+  boldText: {
     fontWeight: "bold",
-    borderBottom: "2px solid #374151",
-    paddingBottom: 5,
-    marginBottom: 10,
-  },
-  section: {
-    paddingTop: 12,
-    marginBottom: 20,
-    paddingBottom: 10,
-    borderBottom: "1px solid #e5e7eb",
   },
 });
 
-const PDFtemplate5: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
-  resumeDetails,
-}) => (
+const ResumeTemplate5:React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({ resumeDetails }) => (
   <Document>
-    <Page size="A4" style={styles.page}>
+    <Page style={styles.page}>
+      {/* Header */}
       <View style={styles.header}>
-        <View style={styles.leftColumn}>
-          <Image
-            style={styles.photo}
-            src={
-              resumeDetails.imagePreviewUrl ||
-              "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
-            }
-          />
-          <Text style={styles.name}>
-            {resumeDetails.firstName} {resumeDetails.lastName}
-          </Text>
-
-
-          <View style={styles.contactItem}>
-            <Text style={styles.iconText}>{resumeDetails.email}</Text>
-          </View>
-
-          <View style={styles.contactItem}>
-            <Text style={styles.iconText}>{resumeDetails.phone}</Text>
-          </View>
-
-          {/* <View style={styles.contactItem}>
-            <Text style={styles.iconText}>{resumeDetails.dateOfBirth}</Text>
-          </View> */}
-          {resumeDetails.city && (
-            <View style={styles.contactItem}>
-              <Text style={styles.iconText}>{resumeDetails.city}</Text>
-            </View>
-          )}
-          {resumeDetails.address && (
-            <View style={styles.contactItem}>
-              <Text style={styles.iconText}>{resumeDetails.address}</Text>
-            </View>
-          )}
-
-          <Text style={styles.sectionTitle}>{resumeDetails.skillsTITLE}</Text>
-          {resumeDetails.skills &&
-            resumeDetails.skills.map((skill, index) => {
-              return (
-                <Text key={index} style={styles.text}>
-                  - {skill}
-                </Text>
-              );
-            })}
-
-          <Text style={styles.sectionTitle}>
-            {resumeDetails.languagesTITLE}
-          </Text>
-
-          {resumeDetails.languages &&
-            resumeDetails.languages.map((language, index) => {
-              return (
-                <Text key={index} style={styles.text}>
-                  - {language}
-                </Text>
-              );
-            })}
-
-          <Text style={styles.sectionTitle}>
-            {resumeDetails.socialLinksTITLE}
-          </Text>
-          {resumeDetails.socialLinks &&
-            resumeDetails.socialLinks.map((link, index) => {
-              return (
-                <Link key={index} style={styles.contact} src={link}>
-                  {link}{" "}
-                </Link>
-              );
-            })}
+         <Image
+              style={styles.headerImage}
+              src={resumeDetails.imagePreviewUrl || "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
+              }
+            />
+        <View style={styles.headerText}>
+          <Text>{resumeDetails.firstName} {resumeDetails.lastName}</Text>
         </View>
+        <View style={styles.contactInfo}>
+          <Text>{resumeDetails.phone}</Text>
+          <Text>{resumeDetails.email}</Text>
+        </View>
+      </View>
 
-        <View style={styles.rightColumn}>
-          <Text style={styles.sectionTitle}>
-            {resumeDetails.professionalSummaryTITLE}
-          </Text>
-          <Text style={styles.text}>{resumeDetails.professionalSummary}</Text>
+    
+      {resumeDetails.professionalSummaryTITLE && ( <View style={styles.section}>
+        <Text style={styles.subheader}>{resumeDetails.professionalSummaryTITLE}</Text>
+        <Text>{resumeDetails.professionalSummary}</Text>
+      </View>)}
+     
 
-          <Text style={styles.employmentSectionTitle}>
-            {resumeDetails.emplymentTITLE}
-          </Text>
-
-          {resumeDetails.employmentHistory?.map((eHistory, index) => (
-            <View key={index} style={{ marginVertical: 5 }}>
-              <Text style={{ fontWeight: "bold" }}>
-                {eHistory.jobHistoryStartAndEndYear}
-              </Text>{" "}
-              <Text>
-                {eHistory.jobHistoryJobTitle} - {eHistory.jobHistoryEmployer},{" "}
-                {eHistory.jobHistoryCity}
-              </Text>
-              <Text style={styles.jobDescrText}>
-                {eHistory.jobHistoryDescription}
-              </Text>
-            </View>
+{resumeDetails.socialLinksTITLE && (
+  
+      <View style={styles.section}>
+        <Text style={styles.subheader}>{resumeDetails.socialLinksTITLE}</Text>
+        <View style={styles.list}>
+          {resumeDetails.socialLinks?.map((link, index) => (
+            <Link key={index} style={styles.text} src={link}>
+              {link}
+            </Link>
           ))}
+        </View>
+      </View>
 
-          {resumeDetails.educationTITLE && (
-            //! use flex and gap
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>
-                {resumeDetails.educationTITLE}
-              </Text>
-              {resumeDetails.education?.map((education, index) => (
-                <View key={index} style={styles.emplymentView}>
-                  <Text style={styles.text}>
-                    {education.educationDegree} at {education.educationSchoold}
-                    <Text>
-                      {", "}
-                      {education.educationCity}
-                    </Text>
-                  </Text>
-
-                  <Text style={[styles.text]}>
-                    {education.educationStartAndEndYear}
-                  </Text>
-                  <View style={styles.list}>
-                    <Text style={styles.listItem}>
-                      {education.educationDescription}
-                    </Text>
-                  </View>
-                </View>
+)}
+      {/* Skills and Education */}
+      <View style={styles.twoColumn}>
+       
+        <View style={styles.leftColumn}>
+ {resumeDetails.skillsTITLE && (
+          <>
+          
+          <View style={styles.section}>
+            <Text style={styles.subheader}>{resumeDetails.skillsTITLE}</Text>
+            <View style={styles.list}>
+              {resumeDetails.skills?.map((skill, index) => (
+                <Text key={index} style={styles.listItem}>
+                  {skill}
+                </Text>
               ))}
             </View>
-          )}
+          </View>
+          </>
+        )}
+
+
+{resumeDetails.educationTITLE && (
+          <View style={styles.section}>
+            <Text style={styles.subheader}>{resumeDetails.educationTITLE}</Text>
+            {resumeDetails.education?.map((edu, index) => (
+              <View key={index} style={styles.text}>
+                <Text style={styles.boldText}>{edu.educationDegree}</Text>
+                <Text>{edu.educationSchoold}</Text>
+                <Text>{edu.educationStartAndEndYear}</Text>
+              </View>
+            ))}
+          </View>)}
+
+        </View>
+
+        {/* Experience */}
+        <View style={styles.rightColumn}>
+          <View style={styles.section}>
+            <Text style={styles.subheader}>{resumeDetails.emplymentTITLE}</Text>
+            {resumeDetails.employmentHistory?.map((exp, index) => (
+              <View key={index} style={styles.text}>
+                <Text style={styles.boldText}>{exp.jobHistoryJobTitle}</Text>
+                <Text>{exp.jobHistoryEmployer}</Text>
+                <Text>{exp.jobHistoryStartAndEndYear}</Text>
+                <Text>{exp.jobHistoryDescription}</Text>
+              </View>
+            ))}
+          </View>
         </View>
       </View>
     </Page>
   </Document>
 );
 
-export default PDFtemplate5;
+export default ResumeTemplate5;

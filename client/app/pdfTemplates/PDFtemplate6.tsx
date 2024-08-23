@@ -5,165 +5,238 @@ import {
   Text,
   View,
   StyleSheet,
-  Link,
   Image,
+  Link,
 } from "@react-pdf/renderer";
 import { ResumeDeatilsFormData } from "../utils/types";
 
 const styles = StyleSheet.create({
   page: {
-    padding: 20,
     fontFamily: "Helvetica",
-    fontSize: 11,
+    fontSize: 10,
+    lineHeight: 1.5,
     color: "#333",
   },
   header: {
-    backgroundColor: "#003366",
-    color: "#ffffff",
-    padding: 10,
-    textAlign: "center",
+    margin: 30,
+    display: "flex",
     flexDirection: "row",
-    alignItems: "center",
-  },
-  headerImage: {
-    width: 50,
-    height: 50,
-    borderRadius: "50%",
-    marginRight: 10,
-  },
-  headerText: {
-    flexGrow: 1,
-    fontSize: 20,
-  },
-  contactInfo: {
-    marginTop: 10,
-    color: "#ffffff",
-  },
-  section: {
-    marginVertical: 10,
+    justifyContent: "space-between",
+    borderBottomWidth: 2,
+    borderBottomColor: "#FFDD44",
+
     paddingBottom: 10,
-    borderBottom: "1px solid #dddddd",
+    marginBottom: 15,
   },
-  subheader: {
-    fontSize: 14,
-    marginBottom: 5,
-    fontWeight: "bold",
+  contactInfo1: {
+    // width:"full",
+    padding: 4,
+    backgroundColor: "#FFDD44",
   },
-  text: {
-    marginBottom: 5,
-  },
-  list: {
-    paddingLeft: 15,
-  },
-  listItem: {
-    marginBottom: 3,
-  },
-  leftColumn: {
-    width: "30%",
-    paddingRight: 10,
-  },
-  rightColumn: {
-    width: "70%",
-  },
-  twoColumn: {
+  contactInfo2: {
+    fontSize: 10,
+    marginHorizontal: 30,
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  iconText: {
-    flexDirection: "row",
-    alignItems: "center",
+  name: {
+    fontSize: 24,
+    fontWeight: "bold",
     marginBottom: 5,
   },
-  icon: {
-    width: 12,
-    height: 12,
-    marginRight: 5,
+  title: {
+    fontSize: 10,
+    marginBottom: 10,
   },
-  boldText: {
+  summary: {
+    fontSize: 10,
+    marginBottom: 10,
+    maxWidth: "80%",
+  },
+  profileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: "50%",
+    marginTop: -15,
+  },
+  section: {
+    marginBottom: 10,
+  },
+  sectionTitle: {
+    fontSize: 12,
     fontWeight: "bold",
+    color: "#FFF",
+    backgroundColor: "#FFDD44",
+    paddingVertical: 3,
+    paddingHorizontal: 5,
+    marginBottom: 5,
+    textTransform: "uppercase",
+  },
+  skillsSection: {
+    flexDirection: "column",
+  },
+  educationSection: {
+    flexDirection: "column",
+  },
+  workHistorySection: {
+    flexDirection: "column",
+  },
+  referenceSection: {
+    flexDirection: "column",
+  },
+  bulletList: {
+    marginTop: 5,
+    paddingLeft: 10,
+  },
+  bulletPoint: {
+    marginBottom: 3,
+  },
+  sectionColumn: {
+    padding: 30,
+
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  leftColumn: {
+    width: "45%",
+    paddingRight: 10,
+  },
+  rightColumn: {
+    width: "45%",
+  },
+  photo: {
+    width: "92em",
+    height: "92em",
+    objectFit: "cover",
+    borderRadius: 50,
+    marginBottom: 10,
   },
 });
 
-const ResumeTemplate6:React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({ resumeDetails }) => (
-  <Document>
-    <Page style={styles.page}>
-      {/* Header */}
-      <View style={styles.header}>
-         <Image
-              style={styles.headerImage}
-              src={resumeDetails.imagePreviewUrl || "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
-              }
-            />
-        <View style={styles.headerText}>
-          <Text>{resumeDetails.firstName} {resumeDetails.lastName}</Text>
-        </View>
-        <View style={styles.contactInfo}>
-          <Text>{resumeDetails.phone}</Text>
-          <Text>{resumeDetails.email}</Text>
-        </View>
-      </View>
+const PDFtemplate6: React.FC<{ resumeDetails: ResumeDeatilsFormData }> = ({
+  resumeDetails,
+}) => {
+  return (
+    <Document>
+      <Page style={styles.page}>
 
-      {/* Profile Summary */}
-      <View style={styles.section}>
-        <Text style={styles.subheader}>Profile Summary</Text>
-        <Text>{resumeDetails.professionalSummary}</Text>
-      </View>
 
-      {/* Social Links */}
-      <View style={styles.section}>
-        <Text style={styles.subheader}>Social Links</Text>
-        <View style={styles.list}>
-          {resumeDetails.socialLinks?.map((link, index) => (
-            <Link key={index} style={styles.text} src={link}>
-              {link}
-            </Link>
-          ))}
+        <View style={styles.contactInfo1}>
+          <View style={styles.contactInfo2}>
+            <Text>{resumeDetails.phone}</Text>
+            <Text>{resumeDetails.email}</Text>
+          </View>
         </View>
-      </View>
 
-      {/* Skills and Education */}
-      <View style={styles.twoColumn}>
-        <View style={styles.leftColumn}>
-          <View style={styles.section}>
-            <Text style={styles.subheader}>Skills</Text>
-            <View style={styles.list}>
-              {resumeDetails.skills?.map((skill, index) => (
-                <Text key={index} style={styles.listItem}>
-                  {skill}
+        
+        <View style={styles.header}>
+          <View>
+            <Text style={styles.name}>
+              {resumeDetails.firstName} {resumeDetails.lastName}
+            </Text>
+            {resumeDetails.professionalSummaryTITLE && (
+              <Text style={styles.summary}>
+                {resumeDetails.professionalSummary}
+              </Text>
+            )}
+          </View>
+          <Image
+            style={styles.photo}
+            src={
+              resumeDetails.imagePreviewUrl ||
+              "https://i0.wp.com/www.stignatius.co.uk/wp-content/uploads/2020/10/default-user-icon.jpg?fit=415%2C415&ssl=1"
+            }
+          />
+        </View>
+
+        <View style={styles.sectionColumn}>
+          <View style={styles.leftColumn}>
+            {resumeDetails.skillsTITLE && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  {resumeDetails.skillsTITLE}
                 </Text>
-              ))}
+                <View style={styles.bulletList}>
+                  {resumeDetails.skills?.map((skill, index) => {
+                    return (
+                      <Text key={index} style={styles.bulletPoint}>
+                        {skill}{" "}
+                      </Text>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
+
+            {resumeDetails.educationTITLE && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  {resumeDetails.educationTITLE}
+                </Text>
+                <View style={styles.bulletList}>
+                  {resumeDetails.education?.map((education, index) => {
+                    return (
+                      <Text key={index}>
+                        {education.educationDegree}:{" "}
+                        {education.educationSchoold} |{" "}
+                        {education.educationStartAndEndYear}
+                      </Text>
+                    );
+                  })}
+                </View>
+              </View>
+            )}
+
+            {resumeDetails.socialLinksTITLE && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>
+                  {resumeDetails.socialLinksTITLE}
+                </Text>
+                <View style={styles.bulletList}>
+                  {resumeDetails.socialLinks?.map((link, index) => (
+                    <Link
+                      key={index}
+                      style={[{ color: "#333", textDecoration: "none" }]}
+                      src={link}
+                    >
+                      {link}
+                    </Link>
+                  ))}
+                </View>
+              </View>
+            )}
+          </View>
+
+          <View style={styles.rightColumn}>
+            <View style={styles.section}>
+              <Text style={styles.sectionTitle}>
+                {resumeDetails.emplymentTITLE}
+              </Text>
+              <View
+                style={{ display: "flex", flexDirection: "column", gap: 11 }}
+              >
+                {resumeDetails.employmentHistory?.map((eHistory, index) => {
+                  return (
+                    <View key={index} style={styles.bulletList}>
+                      <Text style={styles.bulletPoint}>
+                        {eHistory.jobHistoryJobTitle} –{" "}
+                        {eHistory.jobHistoryEmployer}, {eHistory.jobHistoryCity}{" "}
+                        – {eHistory.jobHistoryStartAndEndYear}
+                      </Text>
+                      <Text style={styles.bulletPoint}>
+                        {eHistory.jobHistoryDescription}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
             </View>
           </View>
-
-          <View style={styles.section}>
-            <Text style={styles.subheader}>Education</Text>
-            {resumeDetails.education?.map((edu, index) => (
-              <View key={index} style={styles.text}>
-                <Text style={styles.boldText}>{edu.educationDegree}</Text>
-                <Text>{edu.educationSchoold}</Text>
-                <Text>{edu.educationStartAndEndYear}</Text>
-              </View>
-            ))}
-          </View>
         </View>
+      </Page>
+    </Document>
+  );
+};
 
-        {/* Experience */}
-        <View style={styles.rightColumn}>
-          <View style={styles.section}>
-            <Text style={styles.subheader}>{resumeDetails.emplymentTITLE}</Text>
-            {resumeDetails.employmentHistory?.map((exp, index) => (
-              <View key={index} style={styles.text}>
-                <Text style={styles.boldText}>{exp.jobHistoryJobTitle}</Text>
-                <Text>{exp.jobHistoryEmployer}</Text>
-                <Text>{exp.jobHistoryStartAndEndYear}</Text>
-                <Text>{exp.jobHistoryDescription}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-      </View>
-    </Page>
-  </Document>
-);
-
-export default ResumeTemplate6;
+export default PDFtemplate6;
